@@ -1,4 +1,12 @@
 
+## [0.2.1] - 2026-07-13
+
+### Fixed
+- [fix] update CSS file export path in package.json
+
+---
+
+
 ## [0.2.0] - 2026-07-13
 
 ### Fixed
