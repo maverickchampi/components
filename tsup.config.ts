@@ -1,5 +1,4 @@
 import { defineConfig } from "tsup";
-import { sassPlugin } from "esbuild-sass-plugin";
 
 export default defineConfig({
   entry: ["src/index.ts"],
@@ -9,6 +8,14 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   external: ["react", "react-dom"],
-  injectStyle: true,
-  esbuildPlugins: [sassPlugin({ type: "css-text" })]
+  loader: {
+    ".scss": "local-css",
+    ".css": "local-css"
+  },
+  outExtension() {
+    return {
+      js: ".js",
+      css: ".css"
+    };
+  }
 });
