@@ -12,9 +12,9 @@ export default defineConfig({
     ".scss": "local-css",
     ".css": "local-css"
   },
-  outExtension() {
+  outExtension(ctx) {
     return {
-      js: ".js",
+      js: ctx.format === "esm" ? ".mjs" : ".js",
       css: ".css"
     };
   }
