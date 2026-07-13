@@ -85,7 +85,7 @@ describe("Textarea", () => {
         value="Test"
         onChange={vi.fn()}
         labelCharacters="caracteres"
-      />,
+      />
     );
 
     expect(screen.getByText(/4 \/ 1000 caracteres/i)).toBeInTheDocument();

@@ -8,7 +8,7 @@ export const Button = ({
   ariaLabel,
   onChange,
   className,
-  children,
+  children
 }: ButtonProps) => {
   return (
     <button

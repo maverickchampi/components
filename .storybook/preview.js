@@ -10,18 +10,18 @@ export const globalTypes = {
       icon: "mirror",
       items: [
         { value: "dark", title: "Dark" },
-        { value: "light", title: "Light" },
+        { value: "light", title: "Light" }
       ],
-      showName: true,
-    },
-  },
+      showName: true
+    }
+  }
 };
 
 export const decorators = [
   (Story, context) => {
     document.documentElement.setAttribute("data-theme", context.globals.theme);
     return Story();
-  },
+  }
 ];
 
 export const parameters = {
@@ -29,14 +29,14 @@ export const parameters = {
   controls: {
     matchers: {
       color: /(background|color)$/i,
-      date: /Date$/i,
-    },
+      date: /Date$/i
+    }
   },
   backgrounds: {
     default: "dark",
     values: [
       { name: "dark", value: "#091e25" },
-      { name: "light", value: "#fbfdfe" },
-    ],
-  },
+      { name: "light", value: "#fbfdfe" }
+    ]
+  }
 };

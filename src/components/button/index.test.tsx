@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { Button } from "./index";
+import styles from "./styles.module.scss";
 
 describe("Button Component", () => {
   it("should render button with text", () => {
@@ -12,13 +13,13 @@ describe("Button Component", () => {
   it("should render with primary variant by default", () => {
     render(<Button>Primary</Button>);
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("primary");
+    expect(button).toHaveClass(styles.primary);
   });
 
   it("should render with outline variant", () => {
     render(<Button variant="outline">Outline</Button>);
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("outline");
+    expect(button).toHaveClass(styles.outline);
   });
 
   it("should call onClick handler when clicked", () => {
@@ -43,9 +44,10 @@ describe("Button Component", () => {
   });
 
   it("should show spinner when loading", () => {
-    render(<Button loading>Content</Button>);
-    const spinner = document.querySelector(".spinner");
+    const { container } = render(<Button loading>Content</Button>);
+    const spinner = container.querySelector("span");
     expect(spinner).toBeInTheDocument();
+    expect(spinner).toHaveClass(styles.spinner);
   });
 
   it("should not call onClick when disabled", () => {
@@ -74,17 +76,12 @@ describe("Button Component", () => {
   });
 
   it("should render different variants correctly", () => {
-    const { container: primaryContainer } = render(
-      <Button variant="primary">Primary</Button>
-    );
-    const { container: outlineContainer } = render(
-      <Button variant="outline">Outline</Button>
-    );
+    const { rerender } = render(<Button variant="primary">Primary</Button>);
+    let button = screen.getByRole("button");
+    expect(button).toHaveClass(styles.primary);
 
-    const primaryButton = primaryContainer.querySelector(".primary");
-    const outlineButton = outlineContainer.querySelector(".outline");
-
-    expect(primaryButton).toBeInTheDocument();
-    expect(outlineButton).toBeInTheDocument();
+    rerender(<Button variant="outline">Outline</Button>);
+    button = screen.getByRole("button");
+    expect(button).toHaveClass(styles.outline);
   });
 });
