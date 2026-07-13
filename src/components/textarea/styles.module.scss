@@ -1,0 +1,84 @@
+.textareaComponent{
+  width: 100%;
+  position: relative;
+
+  .textareaWrapper{
+    position: relative;
+
+    .textareaElement{
+      padding: 1rem;
+      border: 1px solid var(--text-placeholder);
+      border-radius: 1rem;
+      height: 250px;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 1rem;
+
+      &:focus-within {
+        border: 1px solid var(--color-primary);
+      }
+
+      textarea{
+        width: 100%;
+        background-color: transparent;
+        min-height: 100px;
+        font-size: 1rem;
+        color: var(--text-primary);
+        border: none;
+        resize: none;
+        outline: none;
+
+        &:disabled{
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+
+        &.hasValue ~ label{
+          color: var(--text-primary)
+        }
+
+        &:focus ~ label{
+          color: var(--color-primary);
+        }
+
+        &.hasValue ~ label,
+        &:focus ~ label{
+          top: 0;
+          font-size: 0.8rem;
+          padding: 0 0.5rem;
+          background: var(--bg-main);
+        }
+      }
+
+      .decorator{
+        color: var(--text-placeholder);
+        font-size: 0.8rem;
+        line-height: 0.8rem;
+        user-select: none;
+      }
+
+      textarea:disabled ~ .decorator,
+      textarea:disabled ~ label{
+        color: var(--text-disabled);
+      }
+
+      label{
+        position: absolute;
+        top: 26px;
+        left: 20px;
+        transform: translateY(-50%);
+        color: var(--text-placeholder);
+        font-size: 1rem;
+        pointer-events: none;
+        transition: top 0.2s, left 0.2s, font-size 0.2s, padding 0.2s;
+      }
+    }
+  }
+
+  .error{
+    display: block;
+    color: #d80000;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+}

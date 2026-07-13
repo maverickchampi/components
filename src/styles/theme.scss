@@ -1,0 +1,26 @@
+:root {
+  color-scheme: light;
+  --bg-main: #fbfdfe;
+  --text-primary: #112130;
+  --text-placeholder: #575757;
+  --text-disabled: #a1a1a1;
+  --color-primary: #116dc9;
+  --color-error: #d80000;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-main: #091e25;
+  --text-primary: #bebebe;
+  --text-placeholder: #A1A1A1;
+  --text-disabled: #a9a8a8;
+  --color-primary: #2baaff;
+  --color-error: #d80000;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  padding: 0;
+  margin: 0;
+}
