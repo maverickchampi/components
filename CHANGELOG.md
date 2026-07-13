@@ -1,4 +1,15 @@
 
+## [0.2.2] - 2026-07-13
+
+### Added
+- [fix] add newline at end of tsup.config.ts
+
+### Fixed
+- [fix] update outExtension function to handle ESM format
+
+---
+
+
 ## [0.2.1] - 2026-07-13
 
 ### Fixed
