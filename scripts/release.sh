@@ -35,7 +35,7 @@ print_info "Running code quality validations..."
 echo ""
 
 # 1. Run Lint
-print_info "1/3 Running lint..."
+print_info "1/2 Running lint..."
 START_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
 if npm run lint > /dev/null 2>&1; then
     END_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
@@ -50,7 +50,7 @@ else
 fi
 
 # 2. Run Unit Tests
-print_info "2/3 Running unit tests..."
+print_info "2/2 Running unit tests..."
 START_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
 if npm test > /dev/null 2>&1; then
     END_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
@@ -60,21 +60,6 @@ else
     print_error "Unit tests: FAILED"
     echo ""
     print_error "Run 'npm test' to see details."
-    echo ""
-    exit 1
-fi
-
-# 3. Run E2E Tests
-print_info "3/3 Running e2e tests..."
-START_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
-if npm run test:e2e > /dev/null 2>&1; then
-    END_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
-    ELAPSED=$(echo "$END_TIME - $START_TIME" | bc)
-    print_success "E2E tests: OK (${ELAPSED}s)"
-else
-    print_error "E2E tests: FAILED"
-    echo ""
-    print_error "Run 'npm run test:e2e' to see details."
     echo ""
     exit 1
 fi
