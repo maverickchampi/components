@@ -1,4 +1,12 @@
 
+## [0.2.0] - 2026-07-13
+
+### Fixed
+- [fix] add CSS file export in package.json
+
+---
+
+
 ## [0.1.1] - 2026-07-13
 
 ### Added
@@ -10,4 +18,3 @@
 - [fix] update button styles to use CSS modules and clean up test cases
 
 ---
-
