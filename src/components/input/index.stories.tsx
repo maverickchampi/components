@@ -7,9 +7,6 @@ const meta: Meta<typeof Input> = {
   title: "Components/Input",
   component: Input,
   tags: ["autodocs"],
-  parameters: {
-    layout: "centered"
-  },
   args: {
     label: "Email",
     type: "email"
@@ -23,9 +20,7 @@ function StatefulInput(args: InputProps) {
   const [value, setValue] = useState(args.value ?? "");
 
   return (
-    <div style={{ width: 360 }}>
-      <Input {...args} value={value} onChange={setValue} />
-    </div>
+    <Input {...args} value={value} onChange={setValue} />
   );
 }
 
