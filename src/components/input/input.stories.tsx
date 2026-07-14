@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
+import { useArgs } from "@storybook/preview-api";
 import { Input } from ".";
 import type { InputProps } from "./props";
 
@@ -9,23 +9,29 @@ const meta: Meta<typeof Input> = {
   tags: ["autodocs"],
   args: {
     label: "Email",
-    type: "email"
+    type: "email",
+    value: ""
   }
 };
 
 export default meta;
+
 type Story = StoryObj<typeof Input>;
 
-function StatefulInput(args: InputProps) {
-  const [value, setValue] = useState(args.value ?? "");
+const Render = (args: InputProps) => {
+  const [{ value }, updateArgs] = useArgs();
 
   return (
-    <Input {...args} value={value} onChange={setValue} />
+    <Input
+      {...args}
+      value={value}
+      onChange={(value) => updateArgs({ value })}
+    />
   );
-}
+};
 
 export const Default: Story = {
-  render: (args) => <StatefulInput {...args} />
+  render: Render
 };
 
 export const WithValue: Story = {
@@ -34,23 +40,19 @@ export const WithValue: Story = {
     type: "text",
     value: "Maverick Champi"
   },
-  render: (args) => <StatefulInput {...args} />
+  render: Render
 };
 
 export const WithError: Story = {
   args: {
-    label: "Email",
-    type: "email",
     error: "This field is required"
   },
-  render: (args) => <StatefulInput {...args} />
+  render: Render
 };
 
 export const Disabled: Story = {
   args: {
-    label: "Email",
-    type: "email",
     disabled: true
   },
-  render: (args) => <StatefulInput {...args} />
+  render: Render
 };

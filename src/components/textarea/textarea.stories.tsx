@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
+import { useArgs } from "@storybook/preview-api";
 import { Textarea } from ".";
-import type { IProps } from "./props";
+import type { TextareaProps } from "./props";
 
 const meta: Meta<typeof Textarea> = {
   title: "Components/Textarea",
@@ -9,44 +9,49 @@ const meta: Meta<typeof Textarea> = {
   tags: ["autodocs"],
   args: {
     label: "Comments",
-    maxCharacters: 500
+    maxCharacters: 500,
+    value: ""
   }
 };
 
 export default meta;
+
 type Story = StoryObj<typeof Textarea>;
 
-function StatefulTextarea(args: IProps) {
-  const [value, setValue] = useState(args.value ?? "");
+const Render = (args: TextareaProps) => {
+  const [{ value }, updateArgs] = useArgs();
 
-  return <Textarea {...args} value={value} onChange={setValue} />;
-}
+  return (
+    <Textarea
+      {...args}
+      value={value}
+      onChange={(value) => updateArgs({ value })}
+    />
+  );
+};
 
 export const Default: Story = {
-  render: (args) => <StatefulTextarea {...args} />
+  render: Render
 };
 
 export const WithValue: Story = {
   args: {
-    label: "Comments",
     value: "Maverick Champi"
   },
-  render: (args) => <StatefulTextarea {...args} />
+  render: Render
 };
 
 export const WithError: Story = {
   args: {
-    label: "Comments",
     error: "This field is required"
   },
-  render: (args) => <StatefulTextarea {...args} />
+  render: Render
 };
 
 export const Disabled: Story = {
   args: {
-    label: "Comments",
     disabled: true,
     value: "Disabled textarea"
   },
-  render: (args) => <StatefulTextarea {...args} />
+  render: Render
 };

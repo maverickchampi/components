@@ -1,17 +1,17 @@
 import { useId } from "react";
-import { IProps } from "./props";
+import { TextareaProps } from "./props";
 import styles from "./styles.module.scss";
 
 export const Textarea = ({
   label,
-  labelCharacters = "Characters",
+  labelCharacters = "characters",
   value,
   onChange,
   error,
   disabled,
   maxCharacters = 1000,
   className
-}: IProps) => {
+}: TextareaProps) => {
   const id = useId();
 
   const isLabelTop = (value?: string) => value ? styles.hasValue : "";
