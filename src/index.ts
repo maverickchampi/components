@@ -1,4 +1,4 @@
-import "./styles/theme.scss";
+import "./styles/index.scss";
 
 export * from "./components/button";
 export * from "./components/checkbox";

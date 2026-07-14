@@ -1,20 +1,24 @@
 :root {
   color-scheme: light;
   --color-bg-main: #fbfdfe;
+  --color-primary: #0c66c1;
+
+  --color-border: #d8d8d8;
   --color-text: #112130;
   --color-placeholder: #575757;
   --color-disabled: #a8a8a8;
-  --color-primary: #0c66c1;
   --color-error: #d80000;
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
   --color-bg-main: #091e25;
+  --color-primary: #0c8adf;
+
+  --color-border: #ffffff33;
   --color-text: #bebebe;
   --color-placeholder: #a1a1a1;
   --color-disabled: #585858;
-  --color-primary: #0c8adf;
   --color-error: #d80000;
 }
 

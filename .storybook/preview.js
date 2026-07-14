@@ -1,5 +1,5 @@
 /** @type {import('@storybook/react').Preview} */
-import "../src/styles/theme.scss";
+import "../src/styles/index.scss";
 
 export const globalTypes = {
   theme: {
