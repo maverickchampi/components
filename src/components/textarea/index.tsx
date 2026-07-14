@@ -20,7 +20,7 @@ export const Textarea = ({
 
     <div className={`${styles.textareaComponent} ${className ?? ""}`}>
       <div className={styles.textareaWrapper}>
-        <div className={styles.textareaElement}>
+        <div className={`${styles.textareaElement} ${disabled ? styles.disabled : ""}`}>
           <textarea
             id={id}
             value={value || ""}

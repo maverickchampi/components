@@ -9,4 +9,5 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   ariaLabel?: string;
   onClick?: () => void;
   children?: string | React.ReactNode;
+  className?: string;
 }

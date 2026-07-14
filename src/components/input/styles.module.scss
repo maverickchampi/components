@@ -12,7 +12,7 @@
 
 .input {
   width: 100%;
-  padding: 1rem 1.5rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   font-size: 1rem;
   box-sizing: border-box;
@@ -23,7 +23,7 @@
   transition: border-color 0.2s ease;
 
   &:-webkit-autofill {
-    padding: 1rem 1.5rem !important;
+    padding: 1rem !important;
     font-size: 1rem !important;
   }
 
@@ -59,7 +59,7 @@
 .label {
   display: block;
   margin-bottom: 0.5rem;
-  margin-left: 1.5rem;
+  margin-left: 1rem;
   font-size: 1rem;
   font-weight: 400;
   color: var(--color-placeholder);

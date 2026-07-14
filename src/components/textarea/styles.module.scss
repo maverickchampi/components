@@ -1,18 +1,27 @@
 .textareaComponent{
-  width: 100%;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  width: fit-content;
 
   .textareaWrapper{
     position: relative;
+    width: 100%;
 
     .textareaElement{
+      width: 100%;
       padding: 1rem;
       border: 1px solid var(--color-placeholder);
-      border-radius: 1rem;
-      height: 250px;
+      border-radius: 0.5rem;
+      min-height: 250px;
       display: grid;
       grid-template-rows: 1fr auto;
       gap: 1rem;
+
+      &.disabled{
+        border-color: var(--color-disabled);
+        cursor: not-allowed;
+      }
 
       &:focus-within {
         border: 1px solid var(--color-primary);
@@ -29,8 +38,8 @@
         outline: none;
 
         &:disabled{
+          color: var(--color-disabled);
           cursor: not-allowed;
-          opacity: 0.5;
         }
 
         &.hasValue ~ label{
@@ -50,6 +59,11 @@
         }
       }
 
+      textarea:disabled ~ .decorator,
+      textarea:disabled ~ label{
+        color: var(--color-disabled);
+      }
+
       .decorator{
         color: var(--color-placeholder);
         font-size: 0.8rem;
@@ -57,15 +71,10 @@
         user-select: none;
       }
 
-      textarea:disabled ~ .decorator,
-      textarea:disabled ~ label{
-        color: var(--color-disabled);
-      }
-
       label{
         position: absolute;
-        top: 26px;
-        left: 20px;
+        top: 1.5rem;
+        left: 1rem;
         transform: translateY(-50%);
         color: var(--color-placeholder);
         font-size: 1rem;
@@ -79,6 +88,5 @@
     display: block;
     color: var(--color-error);
     font-size: 0.8rem;
-    margin-top: 0.25rem;
   }
 }

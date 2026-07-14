@@ -5,7 +5,7 @@ export const globalTypes = {
   theme: {
     name: "Theme",
     description: "Tema global",
-    defaultValue: "dark",
+    defaultValue: "light",
     toolbar: {
       icon: "mirror",
       items: [
@@ -33,7 +33,7 @@ export const parameters = {
     }
   },
   backgrounds: {
-    default: "dark",
+    default: "light",
     values: [
       { name: "dark", value: "#091e25" },
       { name: "light", value: "#fbfdfe" }

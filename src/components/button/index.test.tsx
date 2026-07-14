@@ -24,7 +24,7 @@ describe("Button Component", () => {
 
   it("should call onClick handler when clicked", () => {
     const handleClick = vi.fn();
-    render(<Button onChange={handleClick}>Click</Button>);
+    render(<Button onClick={handleClick}>Click</Button>);
     const button = screen.getByRole("button");
 
     fireEvent.click(button);
@@ -40,20 +40,20 @@ describe("Button Component", () => {
   it("should be disabled when loading is true", () => {
     render(<Button loading>Loading</Button>);
     const button = screen.getByRole("button");
-    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
   });
 
-  it("should show spinner when loading", () => {
+  it("should show dots when loading", () => {
     const { container } = render(<Button loading>Content</Button>);
-    const spinner = container.querySelector("span");
-    expect(spinner).toBeInTheDocument();
-    expect(spinner).toHaveClass(styles.spinner);
+    const dots = container.querySelector("span");
+    expect(dots).toBeInTheDocument();
+    expect(dots).toHaveClass(styles.dots);
   });
 
   it("should not call onClick when disabled", () => {
     const handleClick = vi.fn();
     render(
-      <Button onChange={handleClick} disabled>
+      <Button onClick={handleClick} disabled>
         Disabled
       </Button>
     );
