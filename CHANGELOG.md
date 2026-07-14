@@ -1,4 +1,17 @@
 
+## [0.2.4] - 2026-07-14
+
+### Added
+- [feat] update text area component styles
+- [feat] make label prop optional and adjust input styles
+- [feat] update Button component with loading state and improve styles
+
+### Fixed
+- [fix] simplify Input component layout and adjust styles for consistency
+
+---
+
+
 ## [0.2.3] - 2026-07-13
 
 ### Fixed
