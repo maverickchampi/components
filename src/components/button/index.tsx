@@ -6,19 +6,24 @@ export const Button = ({
   loading,
   disabled,
   ariaLabel,
-  onChange,
+  onClick,
   className,
   children
 }: ButtonProps) => {
   return (
     <button
-      className={`${styles.button} ${styles[variant]} ${className ?? ""}`}
-      disabled={disabled || loading}
+      className={`${styles.button} ${styles[variant]} ${loading ? styles.loading : ""} ${className ?? ""}`}
+      disabled={disabled}
       aria-label={ariaLabel}
-      onClick={onChange}
+      aria-busy={loading}
+      onClick={!loading ? onClick : undefined}
     >
       {loading ? (
-        <span className={styles.spinner}></span>
+        <span className={styles.dots}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
       ) : (
         children
       )}

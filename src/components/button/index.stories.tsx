@@ -9,7 +9,8 @@ const meta: Meta<typeof Button> = {
     variant: {
       control: "select",
       options: ["primary", "secondary", "outline"]
-    }
+    },
+    onClick: { action: "clicked" }
   }
 };
 
@@ -19,28 +20,29 @@ type Story = StoryObj<typeof Button>;
 export const Primary: Story = {
   args: {
     variant: "primary",
-    children: "Botón primario"
-  }
-};
-
-export const Secondary: Story = {
-  args: {
-    variant: "secondary",
-    children: "Botón secundario"
+    children: "Primary Button"
   }
 };
 
 export const Outline: Story = {
   args: {
     variant: "outline",
-    children: "Botón outline"
+    children: "Outline Button"
+  }
+};
+
+export const Loading: Story = {
+  args: {
+    variant: "primary",
+    children: "Loading Button",
+    loading: true
   }
 };
 
 export const Disabled: Story = {
   args: {
     variant: "primary",
-    children: "Deshabilitado",
+    children: "Disabled Button",
     disabled: true
   }
 };

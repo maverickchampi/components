@@ -17,10 +17,10 @@
   border-radius: 1rem;
   box-sizing: border-box;
   font-size: 1rem;
-  border: 1px solid var(--text-placeholder);
+  border: 1px solid var(--color-placeholder);
   outline: none;
   background-color: transparent;
-  color: var(--text-primary);
+  color: var(--color-text);
   text-transform: none !important;
   transition: box-shadow 0.2s;
 
@@ -38,8 +38,8 @@
     top: 0;
     font-size: 0.8rem;
     padding: 0 0.5rem;
-    color: var(--text-primary);
-    background-color: var(--bg-main);
+    color: var(--color-text);
+    background-color: var(--color-bg-main);
   }
 
   &:focus ~ label{
@@ -47,12 +47,13 @@
   }
 
   &:disabled {
-    color: var(--text-disabled);
+    color: var(--color-disabled);
     cursor: not-allowed;
+    opacity: 0.5;
   }
 
   &:disabled ~ label {
-    color: var(--text-disabled);
+    color: var(--color-disabled);
   }
 }
 
@@ -62,7 +63,7 @@
   margin-left: 20px;
   font-size: 1rem;
   font-weight: 400;
-  color: var(--text-placeholder);
+  color: var(--color-placeholder);
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
