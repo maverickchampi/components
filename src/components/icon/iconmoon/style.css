@@ -1,0 +1,93 @@
+@font-face {
+  font-family: 'icons';
+  src:  url('fonts/icons.eot?3atim9');
+  src:  url('fonts/icons.eot?3atim9#iefix') format('embedded-opentype'),
+    url('fonts/icons.ttf?3atim9') format('truetype'),
+    url('fonts/icons.woff?3atim9') format('woff'),
+    url('fonts/icons.svg?3atim9#icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="mcr-"], [class*=" mcr-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icons' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mcr-clock:before {
+  content: "\e900";
+}
+.mcr-earth:before {
+  content: "\e901";
+}
+.mcr-laptop:before {
+  content: "\e902";
+}
+.mcr-inbox:before {
+  content: "\e903";
+}
+.mcr-message:before {
+  content: "\e904";
+}
+.mcr-moon:before {
+  content: "\e905";
+}
+.mcr-sun:before {
+  content: "\e906";
+}
+.mcr-fingerprint:before {
+  content: "\e907";
+}
+.mcr-language:before {
+  content: "\e908";
+}
+.mcr-code:before {
+  content: "\e909";
+}
+.mcr-redirect:before {
+  content: "\e90a";
+}
+.mcr-arrows-rotate:before {
+  content: "\e90b";
+}
+.mcr-arrow-rotate:before {
+  content: "\e90c";
+}
+.mcr-arrow-down:before {
+  content: "\e90d";
+}
+.mcr-arrow-left:before {
+  content: "\e90e";
+}
+.mcr-arrow-right:before {
+  content: "\e90f";
+}
+.mcr-arrow-up:before {
+  content: "\e910";
+}
+.mcr-chevron-down:before {
+  content: "\e911";
+}
+.mcr-chevron-left:before {
+  content: "\e912";
+}
+.mcr-chevron-right:before {
+  content: "\e913";
+}
+.mcr-chevron-up:before {
+  content: "\e914";
+}
+.mcr-x:before {
+  content: "\e915";
+}

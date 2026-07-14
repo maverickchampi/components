@@ -7,7 +7,7 @@ const meta: Meta<typeof Tooltip> = {
   tags: ["autodocs"],
   parameters: {
     layout: "centered"
-  },
+  }
 };
 
 export default meta;
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof Tooltip>;
 export const Top: Story = {
   args: {
     placement: "top",
-    children: "Top Tooltip",
+    children: "Hover me",
     content: "This is a tooltip on top"
   }
 };
@@ -24,7 +24,7 @@ export const Top: Story = {
 export const Bottom: Story = {
   args: {
     placement: "bottom",
-    children: <input type="text" placeholder="Focus me" />,
+    children: <input type="text" placeholder="Hover me" />,
     content: "This is a tooltip on bottom"
   }
 };
@@ -32,7 +32,7 @@ export const Bottom: Story = {
 export const Left: Story = {
   args: {
     placement: "left",
-    children: <button>Hover me</button>,
+    children: <i className="mcr-earth" style={{ fontSize: 24, color: "green" }} />,
     content: "This is a tooltip on left"
   }
 };
