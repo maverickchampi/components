@@ -1,4 +1,12 @@
 
+## [0.2.6] - 2026-07-15
+
+### Fixed
+- [fix] update homepage in package.json
+
+---
+
+
 ## [0.2.5] - 2026-07-15
 
 ### Added
