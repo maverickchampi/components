@@ -1,4 +1,18 @@
 
+## [0.2.5] - 2026-07-15
+
+### Added
+- [add] implementation icons
+- [add] implementation tooltip component
+- [add] implementarion checkbox component
+
+### Fixed
+- [fix] apply lint in icon component
+- [fix] update release.sh
+
+---
+
+
 ## [0.2.4] - 2026-07-14
 
 ### Added
