@@ -9,7 +9,7 @@
     "url": "git@github.com:maverickchampi/components.git",
     "directory": "website"
   },
-  "homepage": "https://maverickchampi-components.vercel.app",
+  "homepage": "https://maverickchampi-components.vercel.app/",
   "engines": {
     "node": ">=24.0.0",
     "npm": ">=11.0.0"
