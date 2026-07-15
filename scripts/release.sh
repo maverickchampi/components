@@ -284,26 +284,203 @@ git tag -a "v${NEW_VERSION}" -m "Release ${NEW_VERSION}"
 
 print_success "Commit and tag created"
 
-# Optionally push to remote
+# ============================================
+# BUILD
+# ============================================
+
+BUILD_DONE=false
+PUBLISH_DONE=false
+PUSH_DONE=false
+
 echo ""
-read -p "Do you want to push the commit and tag to remote? (y/n): " -n 1 -r
+read -p "Do you want to prepare the build? (y/n): " -n 1 -r
 echo
+
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    git push origin master --tags
-    print_success "Pushed to remote repository"
-else
-    print_warning "Remember to push the commit and tag later"
+
+while true; do
+
+    print_info "Building package..."
+
+    if npm run build; then
+        BUILD_DONE=true
+        print_success "Build completed"
+        break
+    fi
+
+    print_error "Build failed"
+    echo ""
+    echo "1) Retry build"
+    echo "2) Continue without build"
+    echo "3) Finish release (keep commit and tag)"
+    echo ""
+    read -p "Select: " BUILD_OPTION
+
+    case $BUILD_OPTION in
+        1)
+            ;;
+        2)
+            break
+            ;;
+        3)
+            print_warning "Release paused."
+            print_warning "Commit and tag are safe."
+            print_warning "Run 'npm run build' later."
+            rm -f CHANGELOG.md.bak
+            exit 0
+            ;;
+        *)
+            print_warning "Invalid option"
+            ;;
+    esac
+
+done
+
 fi
 
-# Clean backup
-rm CHANGELOG.md.bak
+# ============================================
+# PUBLISH
+# ============================================
 
 echo ""
-print_success "🎉 Release ${NEW_VERSION} completed successfully!"
+read -p "Do you want to publish the package? (y/n): " -n 1 -r
+echo
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+while true; do
+
+    print_info "Publishing package..."
+
+    if npm publish; then
+        PUBLISH_DONE=true
+        print_success "Package published"
+        break
+    fi
+
+    print_error "Publish failed"
+    echo ""
+    print_warning "Your release commit is SAFE."
+    print_warning "Your tag is SAFE."
+    echo ""
+    echo "1) Retry publish"
+    echo "2) Finish release (keep commit and tag)"
+    echo ""
+    read -p "Select: " PUBLISH_OPTION
+
+    case $PUBLISH_OPTION in
+        1)
+            ;;
+        2)
+            print_warning ""
+            print_warning "Release paused."
+            print_warning "Nothing has been lost."
+            print_warning ""
+            print_warning "Continue later with:"
+            echo ""
+            echo "npm publish"
+            echo "git push origin master --tags"
+            echo ""
+            rm -f CHANGELOG.md.bak
+            exit 0
+            ;;
+        *)
+            print_warning "Invalid option"
+            ;;
+    esac
+
+done
+
+fi
+
+# ============================================
+# PUSH
+# ============================================
+
 echo ""
+read -p "Do you want to push commit and tag? (y/n): " -n 1 -r
+echo
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+while true; do
+
+    print_info "Pushing to remote..."
+
+    if git push origin master --tags; then
+        PUSH_DONE=true
+        print_success "Push completed"
+        break
+    fi
+
+    print_error "Push failed"
+    echo ""
+    print_warning "Commit and tag are still stored locally."
+    echo ""
+    echo "1) Retry push"
+    echo "2) Finish release (keep local commit/tag)"
+    echo ""
+    read -p "Select: " PUSH_OPTION
+
+    case $PUSH_OPTION in
+        1)
+            ;;
+        2)
+            print_warning ""
+            print_warning "Release paused."
+            print_warning "Nothing has been lost."
+            print_warning ""
+            print_warning "Continue later with:"
+            echo ""
+            echo "git push origin master --tags"
+            echo ""
+            rm -f CHANGELOG.md.bak
+            exit 0
+            ;;
+        *)
+            print_warning "Invalid option"
+            ;;
+    esac
+
+done
+
+fi
+
+# ============================================
+# CLEANUP
+# ============================================
+
+rm -f CHANGELOG.md.bak
+
+echo ""
+print_success "🎉 Release ${NEW_VERSION} finished!"
+echo ""
+
 print_info "Summary:"
-echo "  • Version: ${CURRENT_VERSION} → ${NEW_VERSION}"
-echo "  • Commits included: ${COMMIT_COUNT} of ${AVAILABLE_COMMITS} available"
-echo "  • Tag: v${NEW_VERSION}"
-echo "  • Commit: [version] ${NEW_VERSION}"
+echo ""
+
+echo "  Version : ${CURRENT_VERSION} → ${NEW_VERSION}"
+echo "  Commits : ${COMMIT_COUNT}"
+echo "  Tag     : v${NEW_VERSION}"
+
+if $BUILD_DONE; then
+    echo "  Build   : ✓"
+else
+    echo "  Build   : Skipped"
+fi
+
+if $PUBLISH_DONE; then
+    echo "  Publish : ✓"
+else
+    echo "  Publish : Skipped"
+fi
+
+if $PUSH_DONE; then
+    echo "  Push    : ✓"
+else
+    echo "  Push    : Skipped"
+fi
+
+echo ""
+print_success "Release completed successfully."
 echo ""
