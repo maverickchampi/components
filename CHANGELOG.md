@@ -1,4 +1,13 @@
 
+## [0.2.8] - 2026-07-16
+
+### Fixed
+- [fix] eslint
+- [fix] import and fix icon component
+
+---
+
+
 ## [0.2.7] - 2026-07-16
 
 ### Fixed
