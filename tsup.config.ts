@@ -10,7 +10,7 @@ export default defineConfig({
   external: ["react", "react-dom"],
   loader: {
     ".scss": "local-css",
-    ".css": "local-css"
+    ".css": "css"
   },
   outExtension(ctx) {
     return {

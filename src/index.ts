@@ -1,4 +1,5 @@
 import "./styles/index.scss";
+import "./components/icon/icomoon/style.css";
 
 export * from "./components/button";
 export * from "./components/checkbox";

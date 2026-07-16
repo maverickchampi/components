@@ -1,5 +1,6 @@
 /** @type {import('@storybook/react').Preview} */
 import "../src/styles/index.scss";
+import "../src/components/icon/icomoon/style.css";
 
 export const globalTypes = {
   theme: {

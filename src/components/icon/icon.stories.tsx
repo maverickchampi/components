@@ -1,30 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import styles from "./styles.module.scss";
-
-const ICON_NAMES = [
-  "clock",
-  "earth",
-  "laptop",
-  "inbox",
-  "message",
-  "moon",
-  "sun",
-  "fingerprint",
-  "language",
-  "code",
-  "redirect",
-  "arrows-rotate",
-  "arrows-rotate",
-  "arrow-down",
-  "arrow-left",
-  "arrow-right",
-  "arrow-up",
-  "chevron-down",
-  "chevron-left",
-  "chevron-right",
-  "chevron-up",
-  "x"
-] as const;
+import { ICON_NAMES } from "./props";
 
 const meta: Meta = {
   title: "Foundations/Icons",
@@ -33,17 +9,17 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-Los iconos se usan con la etiqueta \`<i>\` y una clase con el prefijo \`mcr-\`,
+Los iconos se usan con la etiqueta \`<i>\` y una clase con el prefijo \`mc-\`,
 generada por Icomoon. **No existe un componente \`Icon\`** — se usa directamente:
 
 \`\`\`tsx
-<i className="mcr-earth" />
+<i className="mc-earth" />
 \`\`\`
 
 ### Con tamaño y color personalizados
 
 \`\`\`tsx
-<i className="mcr-earth" style={{ fontSize: 24, color: "red" }} />
+<i className="mc-earth" style={{ fontSize: 24, color: "red" }} />
 \`\`\`
 
 ### Accesibilidad
@@ -55,10 +31,10 @@ generada por Icomoon. **No existe un componente \`Icon\`** — se usa directamen
   como práctica defensiva)
 
 \`\`\`tsx
-<i className="mcr-close" aria-hidden="true" />
+<i className="mc-close" aria-hidden="true" />
 
 <button aria-label="Cerrar">
-  <i className="mcr-close" />
+  <i className="mc-close" />
 </button>
 \`\`\`
         `
@@ -77,10 +53,10 @@ export const Gallery: Story = {
         <div
           key={name}
           className={styles.item}
-          onClick={() => navigator.clipboard.writeText(`mcr-${name}`)}
+          onClick={() => navigator.clipboard.writeText(name)}
           title="Click para copiar la clase"
         >
-          <i className={`mcr-${name}`} />
+          <i className={name} />
           <span>{name}</span>
         </div>
       ))}
