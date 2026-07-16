@@ -1,4 +1,12 @@
 
+## [0.2.9] - 2026-07-16
+
+### Changed
+- [update] export icon name and declare fontssize default in icon component
+
+---
+
+
 ## [0.2.8] - 2026-07-16
 
 ### Fixed
