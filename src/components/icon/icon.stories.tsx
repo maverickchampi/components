@@ -10,7 +10,7 @@ const meta: Meta = {
       description: {
         component: `
 Los iconos se usan con la etiqueta \`<i>\` y una clase con el prefijo \`mc-\`,
-generada por Icomoon. **No existe un componente \`Icon\`** — se usa directamente:
+generada por Icomoon, por default el tamaño es 24px. **No existe un componente \`Icon\`** — se usa directamente:
 
 \`\`\`tsx
 <i className="mc-earth" />
@@ -19,7 +19,7 @@ generada por Icomoon. **No existe un componente \`Icon\`** — se usa directamen
 ### Con tamaño y color personalizados
 
 \`\`\`tsx
-<i className="mc-earth" style={{ fontSize: 24, color: "red" }} />
+<i className="mc-earth" style={{ fontSize: 16, color: "red" }} />
 \`\`\`
 
 ### Accesibilidad
