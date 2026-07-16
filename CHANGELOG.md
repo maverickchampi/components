@@ -1,4 +1,12 @@
 
+## [0.2.7] - 2026-07-16
+
+### Fixed
+- [fix] correct export tooltip component
+
+---
+
+
 ## [0.2.6] - 2026-07-15
 
 ### Fixed
