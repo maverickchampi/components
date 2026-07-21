@@ -1,4 +1,12 @@
 
+## [0.4.4] - 2026-07-21
+
+### Added
+- [feat] add size in chip component
+
+---
+
+
 ## [0.4.3] - 2026-07-21
 
 ### Fixed
