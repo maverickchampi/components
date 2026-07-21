@@ -3,6 +3,7 @@ import "./components/icon/icomoon/style.css";
 
 export * from "./components/button";
 export * from "./components/checkbox";
+export * from "./components/chip";
 export { IconName } from "./components/icon/props";
 export * from "./components/input";
 export * from "./components/scrollToTop";

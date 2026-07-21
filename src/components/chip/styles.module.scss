@@ -1,0 +1,37 @@
+.chip{
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.2rem;
+  width: max-content;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  outline: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+
+  &.primary{
+    color: var(--mc-color-primary);
+    background-color: color-mix(in srgb, var(--mc-color-primary), #fff 70%);
+  }
+
+  &.outline{
+    color: var(--mc-color-text);
+    background-color: transparent;
+    border: 1px solid var(--mc-color-border);
+  }
+
+  &[aria-readonly="true"]{
+    cursor: auto;
+  }
+
+  &[disabled]{
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+}
+
+:global([data-theme="dark"]) .chip.primary {
+  background-color: color-mix(in srgb, var(--mc-color-primary), #000 70%);
+}
