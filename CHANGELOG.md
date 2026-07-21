@@ -1,4 +1,12 @@
 
+## [0.4.10] - 2026-07-21
+
+### Fixed
+- [fix] update large variant in chip component
+
+---
+
+
 ## [0.4.9] - 2026-07-21
 
 ### Fixed
