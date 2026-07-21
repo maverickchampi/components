@@ -1,4 +1,12 @@
 
+## [0.4.2] - 2026-07-21
+
+### Fixed
+- [fix] support href in chip component
+
+---
+
+
 ## [0.4.1] - 2026-07-21
 
 ### Fixed
