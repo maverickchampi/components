@@ -1,4 +1,12 @@
 
+## [0.4.5] - 2026-07-21
+
+### Fixed
+- [fix] remove aria readonly in chip component, use readonly class
+
+---
+
+
 ## [0.4.4] - 2026-07-21
 
 ### Added
