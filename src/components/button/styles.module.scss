@@ -6,7 +6,6 @@
   cursor: pointer;
   border: 2px solid transparent;
   outline: none;
-  transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -34,6 +33,7 @@
   background-color: var(--mc-color-primary);
   color: #ffffff;
   border-color: var(--mc-color-primary);
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 
   &:hover:not(:disabled, .loading) {
     transform: translateY(-1px);
@@ -46,6 +46,7 @@
   background-color: transparent;
   color: var(--mc-color-primary);
   border: 2px solid var(--mc-color-primary);
+  transition: transform 0.2s ease, background-color 0.2s ease;
 
   &:hover:not(:disabled, .loading) {
     transform: translateY(-1px);

@@ -1,0 +1,52 @@
+.scrollToTop{
+  z-index: 999;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 1rem;
+  right: 1.5rem;
+  transition: transform 0.2s, opacity 0.2s, visibility 0.2s;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(100%);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--mc-color-bg-main);
+  border: 1px solid var(--mc-color-border);
+  box-shadow: 0 0 0 1px var(--mc-color-border);
+  color: var(--mc-color-text);
+
+  &:focus-visible{
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--mc-color-primary) 25%, transparent);
+  }
+
+  &:disabled{
+    cursor: not-allowed;
+    color: var(--mc-color-disabled);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--mc-color-disabled) 25%, transparent);
+    opacity: 0.8;
+  }
+
+  &.active{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  i{
+    font-size: 1rem;
+  }
+
+  @media (min-width: 769px) {
+    bottom: calc(2.6rem + 1px);
+  }
+}
