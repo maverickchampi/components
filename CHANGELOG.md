@@ -1,4 +1,12 @@
 
+## [0.4.1] - 2026-07-21
+
+### Fixed
+- [fix] update chip components styles
+
+---
+
+
 ## [0.4.0] - 2026-07-21
 
 ### Added
