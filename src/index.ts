@@ -1,11 +1,19 @@
 import "./styles/index.scss";
 import "./components/icon/icomoon/style.css";
 
-export * from "./components/button";
-export * from "./components/checkbox";
-export * from "./components/chip";
+export { Button } from "./components/button";
+export { ButtonProps } from "./components/button/props";
+export { Checkbox } from "./components/checkbox";
+export { CheckboxProps } from "./components/checkbox/props";
+export { Chip } from "./components/chip";
+export { ChipProps } from "./components/chip/props";
 export { IconName } from "./components/icon/props";
-export * from "./components/input";
-export * from "./components/scrollToTop";
-export * from "./components/textarea";
-export * from "./components/tooltip";
+export { Input } from "./components/input";
+export { InputProps } from "./components/input/props";
+export { ScrollToTop } from "./components/scrollToTop";
+export { ScrollToTopProps } from "./components/scrollToTop/props";
+export { Textarea } from "./components/textarea";
+export { TextareaProps } from "./components/textarea/props";
+export { Tooltip } from "./components/tooltip";
+export { TooltipProps } from "./components/tooltip/props";
+
