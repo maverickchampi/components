@@ -5,5 +5,6 @@ export * from "./components/button";
 export * from "./components/checkbox";
 export { IconName } from "./components/icon/props";
 export * from "./components/input";
+export * from "./components/scrollToTop";
 export * from "./components/textarea";
 export * from "./components/tooltip";
