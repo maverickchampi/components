@@ -14,21 +14,29 @@
   &.primary{
     color: var(--mc-color-primary);
     background-color: color-mix(in srgb, var(--mc-color-primary), #fff 70%);
+
+    &:hover:not(:disabled):not([aria-readonly="true"]){
+      border-color: var(--mc-color-primary);
+    }
   }
 
   &.outline{
     color: var(--mc-color-text);
     background-color: transparent;
     border: 1px solid var(--mc-color-border);
+
+    &:hover:not(:disabled):not([aria-readonly="true"]){
+      border-color: var(--mc-color-primary);
+    }
+  }
+
+  &:disabled{
+    opacity: 0.8;
+    cursor: not-allowed;
   }
 
   &[aria-readonly="true"]{
-    cursor: auto;
-  }
-
-  &[disabled]{
-    opacity: 0.8;
-    cursor: not-allowed;
+    cursor: default;
   }
 }
 
