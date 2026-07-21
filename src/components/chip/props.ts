@@ -7,6 +7,7 @@ interface BaseChipProps {
   className?: string;
   children: React.ReactNode;
   variant?: ChipVariant;
+  size?: "small" | "medium" | "large";
 }
 
 type ReadonlyExplicitProps = {

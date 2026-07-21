@@ -1,10 +1,8 @@
 .chip {
-  font-size: 0.8rem;
-  font-weight: 400;
-  line-height: 1.2rem;
   width: max-content;
-  padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
+  font-weight: 400;
+  padding: 0.25rem 0.75rem;
   display: flex;
   align-items: center;
   outline: none;
@@ -13,9 +11,24 @@
   text-decoration: none;
   box-sizing: border-box;
 
+  &.small{
+    font-size: 0.7rem;
+    line-height: 1rem;
+  }
+
+  &.medium {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+  }
+
+  &.large {
+    font-size: 0.9rem;
+    line-height: 1.3rem;
+  }
+
   &.primary {
     color: var(--mc-color-primary);
-    background-color: color-mix(in srgb, var(--mc-color-primary), #fff 70%);
+    background-color: color-mix(in srgb, var(--mc-color-primary), #fff 90%);
 
     &:hover:not(:disabled):not([aria-readonly="true"]) {
       border-color: var(--mc-color-primary);
@@ -34,7 +47,7 @@
   }
 
   &[aria-readonly="true"] {
-    cursor: default;
+    cursor: inherit;
   }
 
   &:disabled {

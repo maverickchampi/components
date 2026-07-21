@@ -8,10 +8,11 @@ export const Chip = (props: ChipProps) => {
     children,
     variant = "primary",
     readonly = true,
+    size = "medium",
     ...rest
   } = props;
 
-  const combinedClasses = `${styles.chip} ${styles[variant]} ${className ?? ""}`;
+  const combinedClasses = `${styles.chip} ${styles[variant]} ${styles[size]} ${className ?? ""}`;
 
   if (readonly) {
     return (

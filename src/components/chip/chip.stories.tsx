@@ -9,6 +9,10 @@ const meta: Meta<typeof Chip> = {
     variant: {
       control: "select",
       options: ["primary", "outline"]
+    },
+    size: {
+      control: "select",
+      options: ["small", "medium", "large"]
     }
   }
 };
@@ -19,14 +23,16 @@ type Story = StoryObj<typeof Chip>;
 export const Primary: Story = {
   args: {
     variant: "primary",
-    children: "Primary Chip (Readonly)"
+    children: "Primary Chip (Readonly)",
+    size: "medium"
   }
 };
 
 export const Outline: Story = {
   args: {
     variant: "outline",
-    children: "Outline Chip (Readonly)"
+    children: "Outline Chip (Readonly)",
+    size: "medium"
   }
 };
 
@@ -35,7 +41,8 @@ export const Clickable: Story = {
     variant: "primary",
     children: "Clickable Chip",
     readonly: false,
-    onClick: () => alert("Chip clicked!")
+    onClick: () => alert("Chip clicked!"),
+    size: "medium"
   }
 };
 
@@ -44,7 +51,8 @@ export const Disabled: Story = {
     variant: "primary",
     children: "Disabled Chip",
     readonly: false,
-    disabled: true
+    disabled: true,
+    size: "medium"
   }
 };
 
@@ -54,6 +62,7 @@ export const AsLink: Story = {
     children: "Chip Link (Open Portfolio)",
     readonly: false,
     href: "https://maverickchampi.vercel.app",
-    target: "_blank"
+    target: "_blank",
+    size: "medium"
   }
 };
