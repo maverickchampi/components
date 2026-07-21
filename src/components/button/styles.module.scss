@@ -21,7 +21,7 @@
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary) 25%, transparent);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--mc-color-primary) 25%, transparent);
   }
 
   &:disabled {
@@ -31,25 +31,25 @@
 }
 
 .primary {
-  background-color: var(--color-primary);
+  background-color: var(--mc-color-primary);
   color: #ffffff;
-  border-color: var(--color-primary);
+  border-color: var(--mc-color-primary);
 
   &:hover:not(:disabled, .loading) {
     transform: translateY(-1px);
-    background-color: color-mix(in srgb, var(--color-primary) 80%, black);
-    border-color: color-mix(in srgb, var(--color-primary) 80%, black);
+    background-color: color-mix(in srgb, var(--mc-color-primary) 80%, black);
+    border-color: color-mix(in srgb, var(--mc-color-primary) 80%, black);
   }
 }
 
 .outline {
   background-color: transparent;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  color: var(--mc-color-primary);
+  border: 2px solid var(--mc-color-primary);
 
   &:hover:not(:disabled, .loading) {
     transform: translateY(-1px);
-    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    background-color: color-mix(in srgb, var(--mc-color-primary) 10%, transparent);
   }
 }
 
@@ -80,7 +80,7 @@
 }
 
 .button.outline .dots span {
-  background-color: var(--color-primary);
+  background-color: var(--mc-color-primary);
 }
 
 @keyframes wave {

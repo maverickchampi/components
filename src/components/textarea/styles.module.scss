@@ -11,7 +11,7 @@
     .textareaElement{
       width: 100%;
       padding: 1rem;
-      border: 1px solid var(--color-placeholder);
+      border: 1px solid var(--mc-color-placeholder);
       border-radius: 0.5rem;
       min-height: 250px;
       display: grid;
@@ -19,16 +19,16 @@
       gap: 1rem;
 
       &:hover:not(.disabled) {
-        border-color: var(--color-primary);
+        border-color: var(--mc-color-primary);
       }
 
       &.disabled{
-        border-color: var(--color-disabled);
+        border-color: var(--mc-color-disabled);
         cursor: not-allowed;
       }
 
       &:focus-within {
-        border: 1px solid var(--color-primary);
+        border: 1px solid var(--mc-color-primary);
       }
 
       textarea{
@@ -36,22 +36,22 @@
         background-color: transparent;
         min-height: 100px;
         font-size: 1rem;
-        color: var(--color-text);
+        color: var(--mc-color-text);
         border: none;
         resize: none;
         outline: none;
 
         &:disabled{
-          color: var(--color-disabled);
+          color: var(--mc-color-disabled);
           cursor: not-allowed;
         }
 
         &.hasValue ~ label{
-          color: var(--color-text)
+          color: var(--mc-color-text)
         }
 
         &:focus ~ label{
-          color: var(--color-primary);
+          color: var(--mc-color-primary);
         }
 
         &.hasValue ~ label,
@@ -59,17 +59,17 @@
           top: 0;
           font-size: 0.8rem;
           padding: 0 0.5rem;
-          background: var(--color-bg-main);
+          background: var(--mc-color-bg-main);
         }
       }
 
       textarea:disabled ~ .decorator,
       textarea:disabled ~ label{
-        color: var(--color-disabled);
+        color: var(--mc-color-disabled);
       }
 
       .decorator{
-        color: var(--color-placeholder);
+        color: var(--mc-color-placeholder);
         font-size: 0.8rem;
         line-height: 0.8rem;
         user-select: none;
@@ -80,7 +80,7 @@
         top: 1.5rem;
         left: 1rem;
         transform: translateY(-50%);
-        color: var(--color-placeholder);
+        color: var(--mc-color-placeholder);
         font-size: 1rem;
         pointer-events: none;
         transition: top 0.2s, left 0.2s, font-size 0.2s, padding 0.2s;
@@ -90,7 +90,7 @@
 
   .error{
     display: block;
-    color: var(--color-error);
+    color: var(--mc-color-error);
     font-size: 0.8rem;
   }
 }

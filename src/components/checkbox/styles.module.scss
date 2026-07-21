@@ -21,7 +21,7 @@
       font: inherit;
       width: 1.25rem;
       height: 1.25rem;
-      border: 1px solid var(--color-placeholder);
+      border: 1px solid var(--mc-color-placeholder);
       border-radius: 0.25rem;
       display: grid;
       align-items: center;
@@ -29,33 +29,33 @@
       outline: none;
 
       &:hover:not(:disabled){
-        border-color: var(--color-primary);
+        border-color: var(--mc-color-primary);
       }
 
       &:disabled {
         cursor: not-allowed;
-        border-color: var(--color-disabled);
+        border-color: var(--mc-color-disabled);
       }
 
       &:disabled + label {
         cursor: not-allowed;
-        color: var(--color-disabled);
+        color: var(--mc-color-disabled);
       }
 
       &:checked {
-        border-color: var(--color-primary);
+        border-color: var(--mc-color-primary);
       }
 
       &:disabled:checked {
-        border-color: var(--color-disabled);
+        border-color: var(--mc-color-disabled);
       }
 
       &:disabled:before {
-        background-color: var(--color-disabled);
+        background-color: var(--mc-color-disabled);
       }
 
       &:focus-visible {
-        box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 25%, transparent);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--mc-color-primary) 25%, transparent);
       }
 
       &::before {
@@ -65,7 +65,7 @@
         border-radius: 0.12rem;
         transform: scale(0);
         transition: transform 0.2s;
-        background-color: var(--color-primary);
+        background-color: var(--mc-color-primary);
       }
       
       &:checked::before {
@@ -76,14 +76,14 @@
     label {
       font-size: 0.8rem;
       font-weight: 400;
-      color: var(--color-text);
+      color: var(--mc-color-text);
       margin-left: 0.5rem;
     }
   }
 
   .error {
     display: block;
-    color: var(--color-error);
+    color: var(--mc-color-error);
     font-size: 0.8rem;
   }
 }

@@ -3,7 +3,9 @@ import pkg from '../../package.json';
 
 <Meta title="Introduction/Welcome" />
 
-# 🎨 My Component Library
+# My Component Library 
+
+<p style={{ opacity: 0.6, fontSize: '0.9em' }}>Version {pkg.version}</p>
 
 A reusable component library built with **React** and **TypeScript**,
 designed to ensure visual and functional consistency across different
@@ -13,7 +15,7 @@ speeding up the development of new interfaces.
 It also serves as an ongoing practice space to explore component design
 patterns and frontend architecture best practices.
 
-> ⚛️ **Compatible with:** React
+> **Compatible with:** React (+18)
 > For now, the library is built specifically for React (JSX/TSX, hooks).
 > It is not compatible with Angular or Vue, since the component model
 > isn't portable across frameworks without a full rewrite.
@@ -48,9 +50,49 @@ logic. The library serves as a flexible, scalable foundation, ready to
 adapt to different brand identities while maintaining structural and
 behavioral consistency.
 
+### Available variables
+
+| Variable | Light | Dark | Description |
+|---|---|---|---|
+| `--mc-color-bg-main` | `#fbfdfe` | `#091e25` | Main background color |
+| `--mc-color-primary` | `#0c66c1` | `#0c8adf` | Primary color for actions/buttons |
+| `--mc-color-border` | `#d8d8d8` | `#ffffff33` | Border color |
+| `--mc-color-text` | `#112130` | `#bebebe` | Base text color |
+| `--mc-color-placeholder` | `#575757` | `#a1a1a1` | Placeholder text color |
+| `--mc-color-disabled` | `#a8a8a8` | `#585858` | Disabled state color |
+| `--mc-color-error` | `#d80000` | `#d80000` | Error/validation color |
+| `--mc-font-family` | `"Poppins", sans-serif` | `"Poppins", sans-serif` | Global font family |
+
+### Overriding the theme
+
+To customize any of these values in your own project, import the base
+theme and then redeclare the variables you want to change:
+
+```css
+/* your-app-theme.css */
+@import '@maverickchampi/components/theme.css';
+
+:root {
+  --mc-color-primary: #ff6b00;
+  --mc-font-family: "Inter", sans-serif;
+}
+```
+
+### Switching between light and dark mode
+
+Dark mode is controlled via the `data-theme` attribute on the `<html>` element:
+
+```html
+<html data-theme="dark">
+```
+
+Or toggled dynamically with JavaScript:
+
+```js
+document.documentElement.setAttribute('data-theme', 'dark');
+```
+
 ## 🚀 Getting started
 
 Explore the sidebar to see each documented component along with its
 variants, props, and usage examples.
-
-<p style={{ opacity: 0.6, fontSize: '0.9em' }}>Version {pkg.version}</p>
