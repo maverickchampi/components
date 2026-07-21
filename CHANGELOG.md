@@ -1,4 +1,12 @@
 
+## [0.4.0] - 2026-07-21
+
+### Added
+- [add] implementation chip component
+
+---
+
+
 ## [0.3.2] - 2026-07-21
 
 ### Fixed
