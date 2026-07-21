@@ -8,7 +8,7 @@ describe("Chip Component", () => {
     render(<Chip>New Tag</Chip>);
     const chip = screen.getByText(/new tag/i);
     expect(chip.tagName).toBe("SPAN");
-    expect(chip).toHaveAttribute("aria-readonly", "true");
+    expect(chip).toHaveClass(styles.readonly);
   });
 
   it("should render with primary variant by default", () => {
@@ -74,8 +74,8 @@ describe("Chip Component", () => {
 
   it("should have aria-label when provided", () => {
     render(<Chip ariaLabel="Custom label">Chip</Chip>);
-    const chip = screen.getByLabelText("Custom label");
-    expect(chip).toBeInTheDocument();
+    const chip = screen.getByText("Chip");
+    expect(chip).toHaveAttribute("aria-label", "Custom label");
   });
 
   it("should accept custom className", () => {
@@ -83,5 +83,23 @@ describe("Chip Component", () => {
     const chip = screen.getByText("Chip");
     expect(chip).toHaveClass("my-custom-chip");
     expect(chip).toHaveClass(styles.chip);
+  });
+
+  it("should render with medium size by default", () => {
+    render(<Chip>Default Size</Chip>);
+    const chip = screen.getByText("Default Size");
+    expect(chip).toHaveClass(styles.medium);
+  });
+
+  it("should render with small size class when provided", () => {
+    render(<Chip size="small">Small Chip</Chip>);
+    const chip = screen.getByText("Small Chip");
+    expect(chip).toHaveClass(styles.small);
+  });
+
+  it("should render with large size class when provided", () => {
+    render(<Chip size="large">Large Chip</Chip>);
+    const chip = screen.getByText("Large Chip");
+    expect(chip).toHaveClass(styles.large);
   });
 });

@@ -12,14 +12,19 @@ export const Chip = (props: ChipProps) => {
     ...rest
   } = props;
 
-  const combinedClasses = `${styles.chip} ${styles[variant]} ${styles[size]} ${className ?? ""}`;
+  const combinedClasses = `
+    ${styles.chip} 
+    ${styles[variant]} 
+    ${styles[size]} 
+    ${readonly ? styles.readonly : ""} 
+    ${className ?? ""}
+  `.trim().replace(/\s+/g, " ");
 
   if (readonly) {
     return (
       <span
         className={combinedClasses}
         aria-label={ariaLabel}
-        aria-readonly="true"
         {...(rest as React.ComponentPropsWithoutRef<"span">)}
       >
         {children}

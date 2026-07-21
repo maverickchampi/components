@@ -1,13 +1,14 @@
 import React from "react";
 
 export type ChipVariant = "primary" | "outline";
+export type ChipSize = "small" | "medium" | "large";
 
 interface BaseChipProps {
   ariaLabel?: string;
   className?: string;
   children: React.ReactNode;
   variant?: ChipVariant;
-  size?: "small" | "medium" | "large";
+  size?: ChipSize;
 }
 
 type ReadonlyExplicitProps = {
@@ -38,5 +39,5 @@ type ButtonChipProps = {
   disabled?: boolean;
 } & Omit<React.ComponentPropsWithoutRef<"button">, "onClick" | "disabled" | "children">;
 
-export type ChipProps = BaseChipProps & 
+export type ChipProps = BaseChipProps &
   (ReadonlyExplicitProps | ReadonlyDefaultProps | LinkChipProps | ButtonChipProps);
