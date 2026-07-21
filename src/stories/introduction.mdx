@@ -1,0 +1,56 @@
+import { Meta } from '@storybook/blocks';
+import pkg from '../../package.json';
+
+<Meta title="Introduction/Welcome" />
+
+# 🎨 My Component Library
+
+A reusable component library built with **React** and **TypeScript**,
+designed to ensure visual and functional consistency across different
+personal and professional projects — avoiding code duplication and
+speeding up the development of new interfaces.
+
+It also serves as an ongoing practice space to explore component design
+patterns and frontend architecture best practices.
+
+> ⚛️ **Compatible with:** React
+> For now, the library is built specifically for React (JSX/TSX, hooks).
+> It is not compatible with Angular or Vue, since the component model
+> isn't portable across frameworks without a full rewrite.
+
+## 📖 Component-by-component documentation
+
+Each component is individually documented and tested in Storybook,
+allowing you to visualize its different states, variants, and props in
+isolation — making both development and visual review easier before
+integrating it into production.
+
+## 🎨 Styling
+
+Styles are handled using a combination of **CSS Modules** and **Sass**,
+which provides:
+
+- Safe, component-scoped styles (no class collisions)
+- Sass variables, mixins, and nesting for more maintainable and
+  expressive stylesheets
+
+## 🌗 Theming System
+
+One of the key aspects of this library is its **theming system based on
+modifiable Sass variables**. This makes it easy to adjust:
+
+- Color palette
+- Typography
+- Overall visual tone
+
+...according to the needs of each project, without touching component
+logic. The library serves as a flexible, scalable foundation, ready to
+adapt to different brand identities while maintaining structural and
+behavioral consistency.
+
+## 🚀 Getting started
+
+Explore the sidebar to see each documented component along with its
+variants, props, and usage examples.
+
+<p style={{ opacity: 0.6, fontSize: '0.9em' }}>Version {pkg.version}</p>
