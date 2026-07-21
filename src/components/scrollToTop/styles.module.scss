@@ -33,7 +33,6 @@
     cursor: not-allowed;
     color: var(--mc-color-disabled);
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--mc-color-disabled) 25%, transparent);
-    opacity: 0.8;
   }
 
   &.active{
