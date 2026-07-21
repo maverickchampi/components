@@ -1,4 +1,20 @@
 
+## [0.3.0] - 2026-07-21
+
+### Added
+- [add] implementation scrollToTop component
+- [feat] add introduction in storybook
+
+### Changed
+- [update] add preview link in readme
+
+### Fixed
+- [fix] update scrollToTop component styles
+- [fix] add prefix in vars for styles
+
+---
+
+
 ## [0.2.9] - 2026-07-16
 
 ### Changed
