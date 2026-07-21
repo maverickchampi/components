@@ -1,7 +1,6 @@
 .chip {
   width: max-content;
   border-radius: 0.5rem;
-  font-weight: 400;
   display: flex;
   align-items: center;
   outline: none;
@@ -11,18 +10,21 @@
   box-sizing: border-box;
 
   &.small {
+    font-weight: 500;
     font-size: 0.7rem;
     line-height: 1rem;
     padding: 0.2rem 0.5rem;
   }
 
   &.medium {
+    font-weight: 400;
     font-size: 0.8rem;
     line-height: 1.2rem;
     padding: 0.25rem 0.75rem;
   }
 
   &.large {
+    font-weight: 400;
     font-size: 0.9rem;
     line-height: 1.3rem;
     padding: 0.25rem 0.75rem;
