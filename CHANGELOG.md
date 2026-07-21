@@ -1,4 +1,12 @@
 
+## [0.4.8] - 2026-07-21
+
+### Fixed
+- [fix] update font weight in chip component
+
+---
+
+
 ## [0.4.7] - 2026-07-21
 
 ### Fixed
