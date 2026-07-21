@@ -1,4 +1,12 @@
 
+## [0.4.3] - 2026-07-21
+
+### Fixed
+- [fix] readonly correction in chip component
+
+---
+
+
 ## [0.4.2] - 2026-07-21
 
 ### Fixed
