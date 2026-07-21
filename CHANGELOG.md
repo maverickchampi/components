@@ -1,4 +1,12 @@
 
+## [0.3.1] - 2026-07-21
+
+### Fixed
+- [fix] export scrollToTop component
+
+---
+
+
 ## [0.3.0] - 2026-07-21
 
 ### Added
