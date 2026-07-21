@@ -1,4 +1,12 @@
 
+## [0.4.9] - 2026-07-21
+
+### Fixed
+- [fix] export components and interfaces
+
+---
+
+
 ## [0.4.8] - 2026-07-21
 
 ### Fixed
