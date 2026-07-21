@@ -19,22 +19,14 @@ type Story = StoryObj<typeof Chip>;
 export const Primary: Story = {
   args: {
     variant: "primary",
-    children: "Primary Chip"
+    children: "Primary Chip (Readonly)"
   }
 };
 
 export const Outline: Story = {
   args: {
     variant: "outline",
-    children: "Outline Chip"
-  }
-};
-
-export const Disabled: Story = {
-  args: {
-    variant: "primary",
-    children: "Disabled Chip",
-    disabled: true
+    children: "Outline Chip (Readonly)"
   }
 };
 
@@ -44,5 +36,24 @@ export const Clickable: Story = {
     children: "Clickable Chip",
     readonly: false,
     onClick: () => alert("Chip clicked!")
+  }
+};
+
+export const Disabled: Story = {
+  args: {
+    variant: "primary",
+    children: "Disabled Chip",
+    readonly: false,
+    disabled: true
+  }
+};
+
+export const AsLink: Story = {
+  args: {
+    variant: "outline",
+    children: "Chip Link (Open Portfolio)",
+    readonly: false,
+    href: "https://maverickchampi.vercel.app",
+    target: "_blank"
   }
 };

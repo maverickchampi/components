@@ -1,4 +1,4 @@
-.chip{
+.chip {
   font-size: 0.8rem;
   font-weight: 400;
   line-height: 1.2rem;
@@ -10,33 +10,36 @@
   outline: none;
   border: 1px solid transparent;
   cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
 
-  &.primary{
+  &.primary {
     color: var(--mc-color-primary);
     background-color: color-mix(in srgb, var(--mc-color-primary), #fff 70%);
 
-    &:hover:not(:disabled):not([aria-readonly="true"]){
+    &:hover:not(:disabled):not([aria-readonly="true"]) {
       border-color: var(--mc-color-primary);
     }
   }
 
-  &.outline{
+  &.outline {
     color: var(--mc-color-text);
     background-color: transparent;
     border: 1px solid var(--mc-color-border);
 
-    &:hover:not(:disabled):not([aria-readonly="true"]){
+    &:hover:not(:disabled):not([aria-readonly="true"]) {
       border-color: var(--mc-color-primary);
+    color: var(--mc-color-primary);
     }
   }
 
-  &:disabled{
-    opacity: 0.8;
-    cursor: not-allowed;
+  &[aria-readonly="true"] {
+    cursor: default;
   }
 
-  &[aria-readonly="true"]{
-    cursor: default;
+  &:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
   }
 }
 
