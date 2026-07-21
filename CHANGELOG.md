@@ -1,4 +1,12 @@
 
+## [0.4.7] - 2026-07-21
+
+### Fixed
+- [fix] update padding in chip component
+
+---
+
+
 ## [0.4.6] - 2026-07-21
 
 ### Added
