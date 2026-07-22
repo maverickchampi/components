@@ -5,6 +5,7 @@ import styles from "./styles.module.scss";
 export const ScrollToTop = ({
   ariaLabel,
   callback,
+  className,
   disabled,
   minimumScrollY = 300,
   container
@@ -51,7 +52,7 @@ export const ScrollToTop = ({
   return (
     <button
       onClick={handleToTop}
-      className={`${styles.scrollToTop} ${visible ? styles.active : ""}`}
+      className={`${styles.scrollToTop} ${visible ? styles.active : ""} ${className ?? ""}`}
       disabled={disabled}
       aria-label={ariaLabel ?? "Scroll to top"}
     >
