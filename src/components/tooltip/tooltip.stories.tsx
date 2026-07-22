@@ -32,7 +32,7 @@ export const Bottom: Story = {
 export const Left: Story = {
   args: {
     placement: "left",
-    children: <i className="mcr-earth" style={{ fontSize: 24, color: "green" }} />,
+    children: <i className="mc-earth" style={{ fontSize: 24, color: "green" }} />,
     content: "This is a tooltip on left"
   }
 };

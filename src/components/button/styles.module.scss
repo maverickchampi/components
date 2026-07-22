@@ -31,7 +31,7 @@
 
 .primary {
   background-color: var(--mc-color-primary);
-  color: #ffffff;
+  color: var(--mc-color-bg-main);
   border-color: var(--mc-color-primary);
   transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 
@@ -77,7 +77,7 @@
 }
 
 .button.primary .dots span {
-  background-color: #ffffff
+  background-color: var(--mc-color-bg-main);
 }
 
 .button.outline .dots span {

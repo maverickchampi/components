@@ -35,8 +35,8 @@
   }
 
   &.primary {
-    color: var(--mc-color-primary);
-    background-color: color-mix(in srgb, var(--mc-color-primary), #fff 90%);
+    color: color-mix(in srgb, var(--mc-color-primary), #000 35%);
+    background-color: color-mix(in srgb, var(--mc-color-primary), #fff 80%);
 
     &:hover:not(:disabled):not(.readonly) {
       border-color: var(--mc-color-primary);
@@ -61,5 +61,6 @@
 }
 
 :global([data-theme="dark"]) .chip.primary {
+  color: var(--mc-color-primary);
   background-color: color-mix(in srgb, var(--mc-color-primary), #000 70%);
 }
