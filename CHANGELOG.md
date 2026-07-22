@@ -1,4 +1,12 @@
 
+## [0.4.11] - 2026-07-22
+
+### Fixed
+- [fix] correction colors in styles
+
+---
+
+
 ## [0.4.10] - 2026-07-21
 
 ### Fixed
