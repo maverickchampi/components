@@ -1,4 +1,12 @@
 
+## [0.4.12] - 2026-07-22
+
+### Fixed
+- [fix] add className prop in scrollToTop component
+
+---
+
+
 ## [0.4.11] - 2026-07-22
 
 ### Fixed
