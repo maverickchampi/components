@@ -1,4 +1,12 @@
 
+## [1.0.1] - 2026-08-09
+
+### Fixed
+- [fix] update children prop in Modal stories to use string instead of JSX
+
+---
+
+
 ## [1.0.0] - 2026-08-09
 
 ### Added
