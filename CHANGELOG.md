@@ -1,4 +1,15 @@
 
+## [1.0.0] - 2026-08-09
+
+### Added
+- [feat] add Modal component with interactive stories and tests
+
+### Fixed
+- [fix] update position in scrollToTop component
+
+---
+
+
 ## [0.4.12] - 2026-07-22
 
 ### Fixed
