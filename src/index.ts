@@ -10,6 +10,8 @@ export { ChipProps } from "./components/chip/props";
 export { IconName } from "./components/icon/props";
 export { Input } from "./components/input";
 export { InputProps } from "./components/input/props";
+export { Modal } from "./components/modal";
+export { ModalProps } from "./components/modal/props";
 export { ScrollToTop } from "./components/scrollToTop";
 export { ScrollToTopProps } from "./components/scrollToTop/props";
 export { Textarea } from "./components/textarea";
