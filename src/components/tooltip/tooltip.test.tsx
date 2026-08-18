@@ -5,7 +5,7 @@ import { Tooltip } from "./index";
 import styles from "./styles.module.scss";
 
 beforeEach(() => {
-  global.ResizeObserver = vi.fn().mockImplementation(() => ({
+  globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn()
@@ -142,17 +142,6 @@ describe("Tooltip Component", () => {
     await waitFor(() => {
       expect(screen.getByText("bold")).toBeInTheDocument();
     });
-  });
-
-  it("should apply custom className to the reference wrapper", () => {
-    render(
-      <Tooltip content="Tooltip text" className="custom-class">
-        <button>Hover me</button>
-      </Tooltip>
-    );
-
-    const wrapper = screen.getByText("Hover me").closest("div");
-    expect(wrapper).toHaveClass("custom-class");
   });
 
   it("should apply the tooltip class to the floating element", async () => {

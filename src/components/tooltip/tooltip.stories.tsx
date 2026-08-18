@@ -16,7 +16,7 @@ type Story = StoryObj<typeof Tooltip>;
 export const Top: Story = {
   args: {
     placement: "top",
-    children: "Hover me",
+    children: <p>Hover me</p>,
     content: "This is a tooltip on top"
   }
 };
