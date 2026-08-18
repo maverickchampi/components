@@ -4,28 +4,30 @@ import styles from "./styles.module.scss";
 
 export const Checkbox = ({
   label,
-  checked,
   disabled,
-  onChange,
-  error
+  error,
+  checked,
+  ...props
 }: CheckboxProps) => {
   const id = useId();
+  const showError = error && !checked;
 
   return (
     <div className={styles.checkboxComponent}>
       <div className={`${styles.checkboxElement} ${disabled ? styles.disabled : ""}`}>
         <input
+          {...props}
           id={id}
           type="checkbox"
-          checked={checked}
           disabled={disabled}
-          onChange={(e) => onChange?.(e.target.checked)}
+          checked={checked}
+          aria-invalid={!!showError }
         />
 
         <label htmlFor={id}>{label}</label>
       </div>
 
-      {error && (
+      {showError && (
         <span className={styles.error}>{error}</span>
       )}
     </div>

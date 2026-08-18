@@ -12,11 +12,11 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <button
+      {...props}
       className={`${styles.button} ${styles[variant]} ${loading ? styles.loading : ""} ${className ?? ""}`}
       disabled={disabled}
       aria-busy={loading}
       onClick={!loading ? onClick : undefined}
-      {...props}
     >
       {loading ? (
         <>
