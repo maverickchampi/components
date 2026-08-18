@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useArgs } from "@storybook/preview-api";
 import { Textarea } from ".";
+import { useState, useEffect } from "react";
 import type { TextareaProps } from "./props";
 
 const meta: Meta<typeof Textarea> = {
@@ -18,34 +18,39 @@ export default meta;
 
 type Story = StoryObj<typeof Textarea>;
 
-const Render = (args: TextareaProps) => {
-  const [{ value }, updateArgs] = useArgs();
+const TextareaWithState = (props: TextareaProps) => {
+  const [currentValue, setCurrentValue] = useState(props.value ?? "");
+
+  useEffect(() => {
+    setCurrentValue(props.value ?? "");
+  }, [props.value]);
 
   return (
     <Textarea
-      {...args}
-      value={value}
-      onChange={(value) => updateArgs({ value })}
+      {...props}
+      value={currentValue}
+      onChange={(event) => setCurrentValue(event.target.value)}
     />
   );
 };
 
 export const Default: Story = {
-  render: Render
+  render: (args) => <TextareaWithState {...args} />
 };
 
 export const WithValue: Story = {
   args: {
     value: "Maverick Champi"
   },
-  render: Render
+  render: (args) => <TextareaWithState {...args} />
 };
 
 export const WithError: Story = {
   args: {
-    error: "This field is required"
+    error: "This field is required",
+    value: ""
   },
-  render: Render
+  render: (args) => <TextareaWithState {...args} />
 };
 
 export const Disabled: Story = {
@@ -53,5 +58,5 @@ export const Disabled: Story = {
     disabled: true,
     value: "Disabled textarea"
   },
-  render: Render
+  render: (args) => <TextareaWithState {...args} />
 };

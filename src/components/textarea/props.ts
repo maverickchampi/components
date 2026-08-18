@@ -1,10 +1,11 @@
-export interface TextareaProps {
+import React from "react";
+
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  className?: string;
+  disabled?: boolean;
   label: string;
   labelCharacters?: string;
-  value?: string;
-  onChange?: (value: string) => void;
   error?: string;
-  disabled?: boolean;
   maxCharacters?: number;
-  className?: string;
+  value?: string
 }

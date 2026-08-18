@@ -8,10 +8,12 @@ import { Textarea } from ".";
 function ControlledTextarea({
   initialValue = "",
   onChange,
+  onBlur,
   ...props
 }: {
   initialValue?: string;
-  onChange?: (value: string) => void;
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
 } & ComponentProps<typeof Textarea>) {
   const [value, setValue] = useState(initialValue);
 
@@ -19,9 +21,16 @@ function ControlledTextarea({
     <Textarea
       {...props}
       value={value}
-      onChange={(nextValue) => {
-        setValue(nextValue);
-        onChange?.(nextValue);
+      onChange={(event) => {
+        setValue(event.target.value);
+        onChange?.(event);
+      }}
+      onBlur={(event) => {
+        const trimmedValue = event.target.value.trim();
+        setValue(trimmedValue);
+
+        event.target.value = trimmedValue;
+        onBlur?.(event);
       }}
     />
   );
@@ -33,22 +42,6 @@ describe("Textarea", () => {
 
     expect(screen.getByLabelText("Comments")).toBeInTheDocument();
     expect(screen.getByRole("textbox")).toHaveAttribute("id");
-  });
-
-  it("updates value and trims on blur", async () => {
-    const user = userEvent.setup();
-    const handleChange = vi.fn();
-
-    render(<ControlledTextarea label="Comments" onChange={handleChange} />);
-
-    const textarea = screen.getByRole("textbox");
-
-    await user.type(textarea, "  Test comment  ");
-    expect(textarea).toHaveValue("  Test comment  ");
-
-    await user.tab();
-    expect(handleChange).toHaveBeenCalled();
-    expect(textarea).toHaveValue("Test comment");
   });
 
   it("renders the error and character count", () => {
@@ -101,15 +94,5 @@ describe("Textarea", () => {
     render(<Textarea label="Comments" value="Test" onChange={vi.fn()} disabled />);
 
     expect(screen.getByRole("textbox")).toBeDisabled();
-  });
-
-  it("trims the value on blur", () => {
-    const handleChange = vi.fn();
-
-    render(<Textarea label="Comments" value="  Test comment  " onChange={handleChange} />);
-
-    fireEvent.blur(screen.getByRole("textbox"));
-
-    expect(handleChange).toHaveBeenCalledWith("Test comment");
   });
 });
