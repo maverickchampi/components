@@ -1,10 +1,8 @@
-import { RefObject } from "react";
+import { RefObject, ButtonHTMLAttributes } from "react";
 
-export interface ScrollToTopProps {
-  ariaLabel?: string;
+export interface ScrollToTopProps extends ButtonHTMLAttributes<HTMLButtonElement> {            
   callback?: () => void;
   className?: string;
-  disabled?: boolean;
   minimumScrollY?: number;
   container?: RefObject<HTMLElement | null>;
 }

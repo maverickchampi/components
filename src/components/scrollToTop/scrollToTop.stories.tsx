@@ -8,7 +8,7 @@ const meta: Meta<typeof ScrollToTop> = {
   component: ScrollToTop,
   tags: ["autodocs"],
   args: {
-    ariaLabel: "Scroll to top",
+    "aria-label": "Scroll to top",
     minimumScrollY: 300
   },
   parameters: {

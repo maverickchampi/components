@@ -1,4 +1,3 @@
-import { createRef } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { ScrollToTop } from ".";
@@ -26,7 +25,7 @@ describe("ScrollToTop", () => {
   });
 
   it("uses a custom aria-label", () => {
-    render(<ScrollToTop ariaLabel="Back to top" />);
+    render(<ScrollToTop aria-label="Back to top" />);
 
     expect(
       screen.getByRole("button", { name: /back to top/i })
@@ -60,26 +59,34 @@ describe("ScrollToTop", () => {
     expect(screen.getByRole("button")).toBeDisabled();
   });
 
-  it("becomes visible after scrolling up beyond minimumScrollY", () => {
+  it("becomes visible after scrolling up beyond minimumScrollY", async () => {
     render(<ScrollToTop minimumScrollY={100} />);
+
+    window.scrollY = 300;
+    fireEvent.scroll(window);
+
+    await new Promise((resolve) => window.requestAnimationFrame(resolve));
 
     window.scrollY = 150;
     fireEvent.scroll(window);
 
-    window.scrollY = 120;
-    fireEvent.scroll(window);
+    await new Promise((resolve) => window.requestAnimationFrame(resolve));
 
     expect(screen.getByRole("button")).toHaveClass(styles.active);
   });
 
-  it("remains hidden while scrolling down", () => {
+  it("remains hidden while scrolling down", async () => {
     render(<ScrollToTop minimumScrollY={100} />);
 
     window.scrollY = 120;
     fireEvent.scroll(window);
 
+    await new Promise((resolve) => window.requestAnimationFrame(resolve));
+
     window.scrollY = 180;
     fireEvent.scroll(window);
+
+    await new Promise((resolve) => window.requestAnimationFrame(resolve));
 
     expect(screen.getByRole("button")).not.toHaveClass(styles.active);
   });
@@ -89,8 +96,9 @@ describe("ScrollToTop", () => {
     container.scrollTop = 0;
     container.scrollTo = vi.fn();
 
-    const ref = createRef<HTMLDivElement>();
-    ref.current = container;
+    const ref: React.RefObject<HTMLDivElement | null> = {
+      current: container
+    };
 
     render(<ScrollToTop container={ref} />);
 
