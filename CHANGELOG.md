@@ -1,4 +1,12 @@
 
+## [1.2.0] - 2026-08-18
+
+### Added
+- [fix] enhance Input, Textarea, and ScrollToTop components with improved value handling and accessibility features
+
+---
+
+
 ## [1.1.0] - 2026-08-18
 
 ### Added
