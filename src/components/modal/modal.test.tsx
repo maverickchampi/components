@@ -78,7 +78,7 @@ describe("Modal", () => {
     const handleClose = vi.fn();
 
     render(
-      <ControlledModal title="Modal Title" hasCloseButton={true} onClose={handleClose}>
+      <ControlledModal title="Modal Title" hasCloseButtonInDesktop={true} onClose={handleClose}>
         <div>Content</div>
       </ControlledModal>
     );

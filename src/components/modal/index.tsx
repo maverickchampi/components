@@ -12,7 +12,7 @@ export const Modal = ({
   title,
   children,
   closeInClickOut = true,
-  hasCloseButton,
+  hasCloseButtonInDesktop,
   className,
   ariaLabelClose = "Close"
 }: ModalProps) => {
@@ -277,7 +277,7 @@ export const Modal = ({
           onMouseDown={handleMouseDown}
         >
           <h2>{title}</h2>
-          {(hasCloseButton && isDesktop) && (
+          {(hasCloseButtonInDesktop && isDesktop) && (
             <button
               className={styles.modalClose}
               onClick={handleClose}
