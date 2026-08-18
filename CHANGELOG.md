@@ -1,4 +1,22 @@
 
+## [1.1.0] - 2026-08-18
+
+### Added
+- [fix] enhance Textarea component by improving prop handling, adding accessibility features, and updating tests
+
+### Fixed
+- [fix] remove unused ControlledTextarea component and clean up imports in textarea tests
+- [fix] improve prop handling and update stories and tests in tooltip component
+- [fix] update ScrollToTop component to improve prop handling and accessibility
+- [fix] update Modal component to rename hasCloseButton prop to hasCloseButtonInDesktop for clarity and consistency
+- [fix] simplify Checkbox and Input components by removing unnecessary props and improving prop handling
+- [fix] simplify Button and Chip components by removing unnecessary props and improving prop handling
+- [fix] enhance Checkbox and Button components for better prop handling and accessibility
+- [fix] update Button component to use aria-label prop and add srOnly styles for accessibility
+
+---
+
+
 ## [1.0.1] - 2026-08-09
 
 ### Fixed
