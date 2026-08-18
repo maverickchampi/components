@@ -11,7 +11,6 @@ export const ScrollToTop = ({
 }: ScrollToTopProps) => {
   const [visible, setVisible] = useState(false);
   const lastScrollY = useRef(0);
-  const isTicking = useRef(false);
 
   const getScrollElement = useCallback(() => container?.current ?? window, [container]);
 
@@ -26,33 +25,28 @@ export const ScrollToTop = ({
     callback?.();
   };
 
+  const handleVisibilityScrollToTop = useCallback(() => {
+    const currentScrollY = getCurrentScrollY();
+
+    const isScrollingUp = currentScrollY < lastScrollY.current;
+    const hasScrolledEnough = currentScrollY > minimumScrollY;
+
+    setVisible(hasScrolledEnough && isScrollingUp);
+
+    lastScrollY.current = currentScrollY;
+  }, [getCurrentScrollY, minimumScrollY]);
+
   useEffect(() => {
-    const targetElement = getScrollElement();
+    const element = getScrollElement();
 
-    const handleScrollEvaluation = () => {
-      const currentScrollY = getCurrentScrollY();
-      const isScrollingUp = currentScrollY < lastScrollY.current;
-      const hasScrolledEnough = currentScrollY > minimumScrollY;
+    handleVisibilityScrollToTop();
 
-      setVisible(hasScrolledEnough && isScrollingUp);
-      lastScrollY.current = currentScrollY;
-      isTicking.current = false;
-    };
-
-    const onScroll = () => {
-      if (!isTicking.current) {
-        window.requestAnimationFrame(handleScrollEvaluation);
-        isTicking.current = true;
-      }
-    };
-
-    handleScrollEvaluation();
-    targetElement.addEventListener("scroll", onScroll, { passive: true });
+    element.addEventListener("scroll", handleVisibilityScrollToTop);
 
     return () => {
-      targetElement.removeEventListener("scroll", onScroll);
+      element.removeEventListener("scroll", handleVisibilityScrollToTop);
     };
-  }, [getScrollElement, getCurrentScrollY, minimumScrollY]);
+  }, [getScrollElement, handleVisibilityScrollToTop]);
 
   return (
     <button

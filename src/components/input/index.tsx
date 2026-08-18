@@ -22,6 +22,7 @@ export const Input = ({
           type={type}
           aria-invalid={error ? "true" : undefined}
           aria-describedby={errorId}
+          value={props.value ?? ""}
           placeholder=" "
           className={styles.input}
         />

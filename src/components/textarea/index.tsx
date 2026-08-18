@@ -27,6 +27,7 @@ export const Textarea = ({
             id={id}
             disabled={disabled}
             className={isLabelTop(value)}
+            value={value ?? ""}
             placeholder=" "
             aria-invalid={!!error}
             aria-describedby={errorId}

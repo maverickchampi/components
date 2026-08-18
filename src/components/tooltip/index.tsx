@@ -11,7 +11,7 @@ import {
   useInteractions,
   useRole
 } from "@floating-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { TooltipProps } from "./props";
 import styles from "./styles.module.scss";
 
@@ -29,15 +29,15 @@ export function Tooltip({
     placement: placement,
     whileElementsMounted: autoUpdate,
     middleware: [
-      offset(6),
+      offset(5),
       flip({
         fallbackAxisSideDirection: "start"
       }),
-      shift({ padding: 8 })
+      shift()
     ]
   });
 
-  const hover = useHover(context, { move: false, delay: 100 });
+  const hover = useHover(context, { move: false });
   const focus = useFocus(context);
   const dismiss = useDismiss(context);
   const role = useRole(context, { role: "tooltip" });
@@ -49,17 +49,14 @@ export function Tooltip({
     role
   ]);
 
-  const renderReference = React.cloneElement(
-    children,
-    getReferenceProps({
-      ref: refs.setReference,
-      ...children.props
-    })
-  );
-
   return (
     <>
-      {renderReference}
+      <div 
+        ref={refs.setReference}
+        {...getReferenceProps()} 
+      >
+        {children}
+      </div>
 
       <FloatingPortal>
         {isOpen && (
