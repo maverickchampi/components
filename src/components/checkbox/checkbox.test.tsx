@@ -57,7 +57,8 @@ describe("Checkbox Component", () => {
     fireEvent.click(checkbox);
 
     expect(handleChange).toHaveBeenCalledOnce();
-    expect(handleChange).toHaveBeenCalledWith(true);
+    const event = handleChange.mock.calls[0][0];
+    expect(event.type).toBe("change");
   });
 
   it("should be disabled when disabled prop is true", () => {

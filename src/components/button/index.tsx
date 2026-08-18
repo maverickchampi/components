@@ -19,14 +19,11 @@ export const Button = ({
       onClick={!loading ? onClick : undefined}
     >
       {loading ? (
-        <>
-          <span className={styles.srOnly}>Cargando</span>
-          <span className={styles.dots}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-        </>
+        <span className={styles.dots}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
       ) : (
         children
       )}

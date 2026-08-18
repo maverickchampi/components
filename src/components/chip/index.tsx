@@ -1,17 +1,14 @@
 import { ChipProps } from "./props";
 import styles from "./styles.module.scss";
 
-export const Chip = (props: ChipProps) => {
-  const {
-    ariaLabel,
-    className,
-    children,
-    variant = "primary",
-    readonly = true,
-    size = "medium",
-    ...rest
-  } = props;
-
+export const Chip = ({
+  className,
+  children,
+  variant = "primary",
+  readonly = true,
+  size = "medium",
+  ...props
+}: ChipProps) => {
   const combinedClasses = `
     ${styles.chip} 
     ${styles[variant]} 
@@ -22,45 +19,29 @@ export const Chip = (props: ChipProps) => {
 
   if (readonly) {
     return (
-      <span
-        className={combinedClasses}
-        aria-label={ariaLabel}
-        {...(rest as React.ComponentPropsWithoutRef<"span">)}
-      >
+      <span className={combinedClasses} {...(props as React.ComponentPropsWithoutRef<"span">)}>
         {children}
       </span>
     );
   }
 
-  if ("href" in rest && rest.href) {
-    const { href, onClick, ...anchorProps } = rest;
+  if ("href" in props && props.href !== undefined) {
+    const { href, onClick, ...anchorProps } = props as React.ComponentPropsWithoutRef<"a">;
     return (
-      <a
-        className={combinedClasses}
-        href={href}
-        onClick={onClick}
-        aria-label={ariaLabel}
-        role="button"
-        {...anchorProps}
-      >
+      <a {...anchorProps} className={combinedClasses} href={href} onClick={onClick}>
         {children}
       </a>
     );
   }
 
-  const { disabled, onClick, ...buttonProps } = rest as {
-    disabled?: boolean;
-    onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  };
-
+  const { disabled, onClick, ...buttonProps } = props as React.ComponentPropsWithoutRef<"button">;
   return (
     <button
+      {...buttonProps}
       className={combinedClasses}
       onClick={onClick}
-      aria-label={ariaLabel}
       disabled={disabled}
       type="button"
-      {...buttonProps}
     >
       {children}
     </button>

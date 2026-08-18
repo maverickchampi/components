@@ -4,22 +4,21 @@ export type ChipVariant = "primary" | "outline";
 export type ChipSize = "small" | "medium" | "large";
 
 interface BaseChipProps {
-  ariaLabel?: string;
   className?: string;
   children: React.ReactNode;
   variant?: ChipVariant;
   size?: ChipSize;
 }
 
-type ReadonlyExplicitProps = {
-  readonly: true;
+type ReadonlyChipProps = {
+  readonly?: true;
   href?: never;
   onClick?: never;
   disabled?: never;
 } & Omit<React.ComponentPropsWithoutRef<"span">, "children">;
 
-type ReadonlyDefaultProps = {
-  readonly?: never;
+type ReadonlyExplicitProps = {
+  readonly: true;
   href?: never;
   onClick?: never;
   disabled?: never;
@@ -39,5 +38,4 @@ type ButtonChipProps = {
   disabled?: boolean;
 } & Omit<React.ComponentPropsWithoutRef<"button">, "onClick" | "disabled" | "children">;
 
-export type ChipProps = BaseChipProps &
-  (ReadonlyExplicitProps | ReadonlyDefaultProps | LinkChipProps | ButtonChipProps);
+export type ChipProps = BaseChipProps & (ReadonlyChipProps | LinkChipProps | ButtonChipProps);

@@ -55,7 +55,7 @@ describe("Chip Component", () => {
   it("should render as an anchor link when href is provided", () => {
     render(<Chip readonly={false} href="https://example.com">Go to link</Chip>);
     
-    const chip = screen.getByRole("button", { name: /go to link/i });
+    const chip = screen.getByText(/go to link/i);
     
     expect(chip.tagName).toBe("A");
     expect(chip).toHaveAttribute("href", "https://example.com");
@@ -67,13 +67,13 @@ describe("Chip Component", () => {
         External Link
       </Chip>
     );
-    const chip = screen.getByRole("button", { name: /external link/i });
+    const chip = screen.getByText(/external link/i);
     expect(chip).toHaveAttribute("target", "_blank");
     expect(chip).toHaveAttribute("rel", "noopener");
   });
 
   it("should have aria-label when provided", () => {
-    render(<Chip ariaLabel="Custom label">Chip</Chip>);
+    render(<Chip aria-label="Custom label">Chip</Chip>);
     const chip = screen.getByText("Chip");
     expect(chip).toHaveAttribute("aria-label", "Custom label");
   });
