@@ -64,7 +64,7 @@ describe("Button Component", () => {
   });
 
   it("should have aria-label when provided", () => {
-    render(<Button ariaLabel="Custom label">Button</Button>);
+    render(<Button aria-label="Custom label">Button</Button>);
     const button = screen.getByRole("button", { name: /custom label/i });
     expect(button).toBeInTheDocument();
   });

@@ -5,25 +5,28 @@ export const Button = ({
   variant = "primary",
   loading,
   disabled,
-  ariaLabel,
   onClick,
   className,
-  children
+  children,
+  ...props
 }: ButtonProps) => {
   return (
     <button
       className={`${styles.button} ${styles[variant]} ${loading ? styles.loading : ""} ${className ?? ""}`}
       disabled={disabled}
-      aria-label={ariaLabel}
       aria-busy={loading}
       onClick={!loading ? onClick : undefined}
+      {...props}
     >
       {loading ? (
-        <span className={styles.dots}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
+        <>
+          <span className={styles.srOnly}>Cargando</span>
+          <span className={styles.dots}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </>
       ) : (
         children
       )}
