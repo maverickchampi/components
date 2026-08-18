@@ -1,31 +1,6 @@
-import { useState } from "react";
-import type { ComponentProps } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Input } from ".";
-
-function ControlledInput({
-  initialValue = "",
-  onChange,
-  ...props
-}: {
-  initialValue?: string;
-  onChange?: (value: string) => void;
-} & ComponentProps<typeof Input>) {
-  const [value, setValue] = useState(initialValue);
-
-  return (
-    <Input
-      {...props}
-      value={value}
-      onChange={(nextValue) => {
-        setValue(nextValue);
-        onChange?.(nextValue);
-      }}
-    />
-  );
-}
 
 describe("Input", () => {
   it("renders the label and input", () => {
@@ -33,22 +8,6 @@ describe("Input", () => {
 
     expect(screen.getByLabelText("Username")).toBeInTheDocument();
     expect(screen.getByRole("textbox")).toHaveAttribute("id", "username");
-  });
-
-  it("updates its value and trims on blur", async () => {
-    const user = userEvent.setup();
-    const handleChange = vi.fn();
-
-    render(<ControlledInput label="Username" onChange={handleChange} />);
-
-    const input = screen.getByRole("textbox");
-
-    await user.type(input, "  johndoe  ");
-    expect(input).toHaveValue("  johndoe  ");
-
-    await user.tab();
-    expect(handleChange).toHaveBeenCalled();
-    expect(input).toHaveValue("johndoe");
   });
 
   it("renders the error state with accessibility attributes", () => {
@@ -90,15 +49,5 @@ describe("Input", () => {
     render(<Input id="username" label="Username" value="" onChange={vi.fn()} />);
 
     expect(screen.getByRole("textbox")).toHaveAttribute("placeholder", " ");
-  });
-
-  it("trims the value on blur", () => {
-    const handleChange = vi.fn();
-
-    render(<Input id="username" label="Username" value="  johndoe  " onChange={handleChange} />);
-
-    fireEvent.blur(screen.getByRole("textbox"));
-
-    expect(handleChange).toHaveBeenCalledWith("johndoe");
   });
 });

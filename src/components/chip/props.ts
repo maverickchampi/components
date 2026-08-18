@@ -17,13 +17,6 @@ type ReadonlyChipProps = {
   disabled?: never;
 } & Omit<React.ComponentPropsWithoutRef<"span">, "children">;
 
-type ReadonlyExplicitProps = {
-  readonly: true;
-  href?: never;
-  onClick?: never;
-  disabled?: never;
-} & Omit<React.ComponentPropsWithoutRef<"span">, "children">;
-
 type LinkChipProps = {
   readonly: false;
   href: string;

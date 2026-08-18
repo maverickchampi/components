@@ -6,11 +6,9 @@ export const Checkbox = ({
   label,
   disabled,
   error,
-  checked,
   ...props
 }: CheckboxProps) => {
   const id = useId();
-  const showError = error && !checked;
 
   return (
     <div className={styles.checkboxComponent}>
@@ -20,14 +18,13 @@ export const Checkbox = ({
           id={id}
           type="checkbox"
           disabled={disabled}
-          checked={checked}
-          aria-invalid={!!showError }
+          aria-invalid={!!error }
         />
 
         <label htmlFor={id}>{label}</label>
       </div>
 
-      {showError && (
+      {error && (
         <span className={styles.error}>{error}</span>
       )}
     </div>

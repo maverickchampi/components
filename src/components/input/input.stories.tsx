@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useArgs } from "@storybook/preview-api";
 import { Input } from ".";
+import { useState, useEffect } from "react";
 import type { InputProps } from "./props";
 
 const meta: Meta<typeof Input> = {
@@ -10,7 +10,7 @@ const meta: Meta<typeof Input> = {
   args: {
     label: "Email",
     type: "email",
-    value: ""
+    value: "maverick.champi@gmail.com"
   }
 };
 
@@ -18,20 +18,24 @@ export default meta;
 
 type Story = StoryObj<typeof Input>;
 
-const Render = (args: InputProps) => {
-  const [{ value }, updateArgs] = useArgs();
+const InputWithState = (props: InputProps) => {
+  const [currentValue, setCurrentValue] = useState(props.value ?? "");
+
+  useEffect(() => {
+    setCurrentValue(props.value ?? "");
+  }, [props.value]);
 
   return (
     <Input
-      {...args}
-      value={value}
-      onChange={(value) => updateArgs({ value })}
+      {...props}
+      value={currentValue}
+      onChange={(event) => setCurrentValue(event.target.value)}
     />
   );
 };
 
 export const Default: Story = {
-  render: Render
+  render: (args) => <InputWithState {...args} />
 };
 
 export const WithValue: Story = {
@@ -40,19 +44,25 @@ export const WithValue: Story = {
     type: "text",
     value: "Maverick Champi"
   },
-  render: Render
+  render: (args) => <InputWithState {...args} />
 };
 
 export const WithError: Story = {
   args: {
-    error: "This field is required"
+    label: "Email",
+    type: "email",
+    error: "This field is required",
+    value: ""
   },
-  render: Render
+  render: (args) => <InputWithState {...args} />
 };
 
 export const Disabled: Story = {
   args: {
-    disabled: true
+    label: "Disabled Field",
+    type: "text",
+    disabled: true,
+    value: "No me puedes editar"
   },
-  render: Render
+  render: (args) => <InputWithState {...args} />
 };

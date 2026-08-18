@@ -5,29 +5,23 @@ import type { InputProps } from "./props";
 export const Input = ({
   type = "text",
   label,
-  value,
-  onChange,
   error,
-  disabled,
-  id,
-  className
+  className,
+  ...props
 }: InputProps) => {
   const generatedId = useId();
-  const inputId = id ?? generatedId;
+  const inputId = props.id ?? generatedId;
   const errorId = error ? `${inputId}-error` : undefined;
 
   return (
     <div className={`${styles.inputComponent} ${className ?? ""}`}>
       <div className={styles.inputElement}>
         <input
+          {...props}
           id={inputId}
           type={type}
-          value={value ?? ""}
-          disabled={disabled}
           aria-invalid={error ? "true" : undefined}
           aria-describedby={errorId}
-          onChange={(event) => onChange?.(event.target.value)}
-          onBlur={(event) => onChange?.(event.target.value.trim())}
           placeholder=" "
           className={styles.input}
         />
