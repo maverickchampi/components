@@ -1,40 +1,6 @@
-import { useState } from "react";
-import type { ComponentProps } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Textarea } from ".";
-
-function ControlledTextarea({
-  initialValue = "",
-  onChange,
-  onBlur,
-  ...props
-}: {
-  initialValue?: string;
-  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
-} & ComponentProps<typeof Textarea>) {
-  const [value, setValue] = useState(initialValue);
-
-  return (
-    <Textarea
-      {...props}
-      value={value}
-      onChange={(event) => {
-        setValue(event.target.value);
-        onChange?.(event);
-      }}
-      onBlur={(event) => {
-        const trimmedValue = event.target.value.trim();
-        setValue(trimmedValue);
-
-        event.target.value = trimmedValue;
-        onBlur?.(event);
-      }}
-    />
-  );
-}
 
 describe("Textarea", () => {
   it("renders the label and textarea", () => {
