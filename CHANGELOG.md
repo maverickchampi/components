@@ -1,4 +1,12 @@
 
+## [1.2.1] - 2026-08-25
+
+### Fixed
+- [fix] z-index in modal and scrollToTop components
+
+---
+
+
 ## [1.2.0] - 2026-08-18
 
 ### Added
