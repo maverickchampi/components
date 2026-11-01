@@ -37,6 +37,27 @@ describe("Input", () => {
     expect(screen.getByRole("textbox")).toBeDisabled();
   });
 
+  it("keeps the consumer aria-describedby alongside the error", () => {
+    render(
+      <>
+        <span id="hint">Use your work email</span>
+        <Input
+          id="email"
+          label="Email"
+          value=""
+          onChange={vi.fn()}
+          aria-describedby="hint"
+          error="Email is required"
+        />
+      </>
+    );
+
+    expect(screen.getByRole("textbox")).toHaveAttribute(
+      "aria-describedby",
+      "hint email-error"
+    );
+  });
+
   it("supports email inputs", () => {
     render(
       <Input id="email" type="email" label="Email" value="test@example.com" onChange={vi.fn()} />

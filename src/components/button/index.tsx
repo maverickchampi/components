@@ -8,22 +8,28 @@ export const Button = ({
   onClick,
   className,
   children,
+  type = "button",
   ...props
 }: ButtonProps) => {
   return (
     <button
       {...props}
+      type={type}
       className={`${styles.button} ${styles[variant]} ${loading ? styles.loading : ""} ${className ?? ""}`}
       disabled={disabled}
-      aria-busy={loading}
-      onClick={!loading ? onClick : undefined}
+      aria-busy={loading || undefined}
+      aria-disabled={loading || undefined}
+      onClick={loading ? undefined : onClick}
     >
       {loading ? (
-        <span className={styles.dots}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
+        <>
+          <span className={styles.srOnly}>{children}</span>
+          <span className={styles.dots} aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </>
       ) : (
         children
       )}

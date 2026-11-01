@@ -8,5 +8,6 @@ export interface ModalProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "
   closeInClickOut?: boolean;
   className?: string;
   hasCloseButtonInDesktop?: boolean;
-  ariaLabelClose?: this["hasCloseButtonInDesktop"] extends false ? never : string;
+  ariaLabelClose?: string;
+  inertBackground?: boolean;
 }

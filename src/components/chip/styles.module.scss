@@ -3,7 +3,6 @@
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
-  outline: none;
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
@@ -57,6 +56,12 @@
   &:disabled {
     opacity: 0.8;
     cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    border-color: var(--mc-color-primary);
+    outline: 2px solid var(--mc-color-primary);
+    outline-offset: -1px;
   }
 }
 

@@ -15,7 +15,6 @@
       font-size: 1rem;
       box-sizing: border-box;
       border: 1px solid var(--mc-color-placeholder);
-      outline: none;
       background-color: transparent;
       color: var(--mc-color-text);
       transition: border-color 0.2s ease;
@@ -30,7 +29,12 @@
       }
 
       &:focus {
-        border: 1px solid var(--mc-color-primary);
+        border-color: var(--mc-color-primary);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--mc-color-primary);
+        outline-offset: -1px;
       }
 
       &:focus ~ label,

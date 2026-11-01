@@ -26,7 +26,6 @@
       display: grid;
       align-items: center;
       justify-content: center;
-      outline: none;
 
       &:hover:not(:disabled){
         border-color: var(--mc-color-primary);
@@ -55,7 +54,9 @@
       }
 
       &:focus-visible {
-        box-shadow: 0 0 0 4px color-mix(in srgb, var(--mc-color-primary) 25%, transparent);
+        border-color: var(--mc-color-primary);
+        outline: 2px solid var(--mc-color-primary);
+        outline-offset: -1px;
       }
 
       &::before {
@@ -74,6 +75,9 @@
     }
 
     label {
+      display: flex;
+      align-items: center;
+      min-height: 1.5rem;
       font-size: 0.8rem;
       font-weight: 400;
       color: var(--mc-color-text);

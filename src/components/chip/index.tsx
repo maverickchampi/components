@@ -27,8 +27,10 @@ export const Chip = ({
 
   if ("href" in props && props.href !== undefined) {
     const { href, onClick, ...anchorProps } = props as React.ComponentPropsWithoutRef<"a">;
+    const rel = anchorProps.rel ?? (anchorProps.target === "_blank" ? "noopener noreferrer" : undefined);
+
     return (
-      <a {...anchorProps} className={combinedClasses} href={href} onClick={onClick}>
+      <a {...anchorProps} className={combinedClasses} href={href} rel={rel} onClick={onClick}>
         {children}
       </a>
     );

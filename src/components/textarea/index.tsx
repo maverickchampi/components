@@ -12,8 +12,14 @@ export const Textarea = ({
   value,
   ...props
 }: TextareaProps) => {
-  const id = useId();
+  const generatedId = useId();
+  const id = props.id ?? generatedId;
   const errorId = error ? `${id}-error` : undefined;
+  const counterId = `${id}-counter`;
+  const describedBy =
+    [props["aria-describedby"], errorId, counterId].filter(Boolean).join(" ") ||
+    undefined;
+  const currentLength = String(value ?? props.defaultValue ?? "").length;
 
   const isLabelTop = (value?: string | number | readonly string[]) => value ? styles.hasValue : "";
 
@@ -28,18 +34,20 @@ export const Textarea = ({
             disabled={disabled}
             className={isLabelTop(value)}
             value={value ?? ""}
-            placeholder=" "
-            aria-invalid={!!error}
-            aria-describedby={errorId}
+            placeholder={props.placeholder ?? " "}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={describedBy}
             maxLength={maxCharacters}
           />
-          <span className={styles.decorator} aria-hidden="true">{value?.length || 0} / {maxCharacters} {labelCharacters}</span>
+          <span id={counterId} className={styles.decorator}>
+            {currentLength} / {maxCharacters} {labelCharacters}
+          </span>
           <label htmlFor={id}>{label}</label>
         </div>
       </div>
 
       {error && (
-        <span id={errorId} className={styles.error}>{error}</span>
+        <span id={errorId} role="alert" className={styles.error}>{error}</span>
       )}
     </div>
   );

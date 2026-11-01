@@ -106,6 +106,22 @@ describe("Checkbox Component", () => {
     ).toBeInTheDocument();
   });
 
+  it("should associate the error message with the checkbox", () => {
+    render(
+      <Checkbox
+        label="Accept terms and conditions"
+        error="This field is required"
+      />
+    );
+
+    const checkbox = screen.getByRole("checkbox");
+    const error = screen.getByText("This field is required");
+
+    expect(checkbox).toHaveAttribute("aria-invalid", "true");
+    expect(checkbox).toHaveAttribute("aria-describedby", error.id);
+    expect(error).toHaveAttribute("role", "alert");
+  });
+
   it("should apply disabled class", () => {
     const { container } = render(
       <Checkbox

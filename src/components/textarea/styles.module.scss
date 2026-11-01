@@ -28,7 +28,9 @@
       }
 
       &:focus-within {
-        border: 1px solid var(--mc-color-primary);
+        border-color: var(--mc-color-primary);
+        outline: 2px solid var(--mc-color-primary);
+        outline-offset: -1px;
       }
 
       textarea{

@@ -12,6 +12,8 @@ export const Input = ({
   const generatedId = useId();
   const inputId = props.id ?? generatedId;
   const errorId = error ? `${inputId}-error` : undefined;
+  const describedBy =
+    [props["aria-describedby"], errorId].filter(Boolean).join(" ") || undefined;
 
   return (
     <div className={`${styles.inputComponent} ${className ?? ""}`}>
@@ -20,10 +22,10 @@ export const Input = ({
           {...props}
           id={inputId}
           type={type}
-          aria-invalid={error ? "true" : undefined}
-          aria-describedby={errorId}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={describedBy}
           value={props.value ?? ""}
-          placeholder=" "
+          placeholder={props.placeholder ?? " "}
           className={styles.input}
         />
         <label htmlFor={inputId} className={styles.label}>
@@ -32,7 +34,7 @@ export const Input = ({
       </div>
 
       {error ? (
-        <span id={errorId} className={styles.error}>
+        <span id={errorId} role="alert" className={styles.error}>
           {error}
         </span>
       ) : null}

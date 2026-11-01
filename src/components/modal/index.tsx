@@ -1,10 +1,30 @@
 import styles from "./styles.module.scss";
 import type { ModalProps } from "./props";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useId, useLayoutEffect, useRef, useState } from "react";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import ReactDOM from "react-dom";
 
 const modalStack: HTMLDivElement[] = [];
+const modalRootStack: HTMLElement[] = [];
+
+const FOCUSABLE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])"
+].join(", ");
+
+const getFocusableElements = (container: HTMLElement): HTMLElement[] =>
+  Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+    (element) =>
+      !element.hasAttribute("inert") &&
+      element.getAttribute("aria-hidden") !== "true"
+  );
+
+const supportsInert = () =>
+  typeof HTMLElement !== "undefined" && "inert" in HTMLElement.prototype;
 
 export const Modal = ({
   isOpen,
@@ -14,7 +34,9 @@ export const Modal = ({
   closeInClickOut = true,
   hasCloseButtonInDesktop,
   className,
-  ariaLabelClose = "Close"
+  ariaLabelClose = "Close",
+  inertBackground = true,
+  ...rest
 }: ModalProps) => {
   const refContent = useRef<HTMLDivElement>(null);
   const refBody = useRef<HTMLDivElement>(null);
@@ -22,9 +44,14 @@ export const Modal = ({
   const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isClosingRef = useRef(false);
   const isOpeningRef = useRef(false);
+  const dragMovedRef = useRef(false);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  const previousOverflowRef = useRef("");
+  const onCloseRef = useRef(onClose);
   const [shouldRender, setShouldRender] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isScrollAtTop, setIsScrollAtTop] = useState(true);
+  const titleId = useId();
 
   const dragStartY = useRef<number>(0);
   const dragCurrentY = useRef<number>(0);
@@ -34,6 +61,7 @@ export const Modal = ({
   const DRAG_THRESHOLD = 150;
   const MIN_DRAG = 100;
   const VELOCITY_THRESHOLD = 0.8;
+  const TAP_THRESHOLD = 10;
 
   const isDesktop = useMediaQuery("(min-width: 769px)");
 
@@ -54,15 +82,15 @@ export const Modal = ({
 
       refContent.current.style.setProperty("--start-y", `${currentY}px`);
     }
-    
+
     closeTimerRef.current = setTimeout(() => {
       setShouldRender(false);
       setIsClosing(false);
       isClosingRef.current = false;
       closeTimerRef.current = null;
-      onClose?.();
+      onCloseRef.current?.();
     }, 300);
-  }, [onClose]);
+  }, []);
 
   const handleScroll = useCallback(() => {
     if (refBody.current) {
@@ -71,8 +99,43 @@ export const Modal = ({
   }, []);
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === "Escape" && modalStack[modalStack.length - 1] === refContent.current) {
+    if (modalStack[modalStack.length - 1] !== refContent.current) return;
+
+    if (e.key === "Escape") {
+      e.preventDefault();
       handleClose();
+      return;
+    }
+
+    if (e.key !== "Tab" || !refContent.current) return;
+
+    const focusableElements = getFocusableElements(refContent.current);
+
+    if (focusableElements.length === 0) {
+      e.preventDefault();
+      refContent.current.focus();
+      return;
+    }
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+    const activeElement = document.activeElement;
+
+    if (!refContent.current.contains(activeElement)) {
+      e.preventDefault();
+      firstElement.focus();
+      return;
+    }
+
+    if (e.shiftKey && (activeElement === firstElement || activeElement === refContent.current)) {
+      e.preventDefault();
+      lastElement.focus();
+      return;
+    }
+
+    if (!e.shiftKey && activeElement === lastElement) {
+      e.preventDefault();
+      firstElement.focus();
     }
   }, [handleClose]);
 
@@ -104,12 +167,14 @@ export const Modal = ({
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     const target = e.target as HTMLElement;
-    
+
     if (!canDrag(target)) return;
 
     dragStartY.current = e.touches[0].clientY;
+    dragCurrentY.current = e.touches[0].clientY;
     dragStartTime.current = Date.now();
     isDragging.current = true;
+    dragMovedRef.current = false;
   }, [canDrag]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
@@ -117,6 +182,10 @@ export const Modal = ({
 
     dragCurrentY.current = e.touches[0].clientY;
     const diff = dragCurrentY.current - dragStartY.current;
+
+    if (Math.abs(diff) > TAP_THRESHOLD) {
+      dragMovedRef.current = true;
+    }
 
     if (diff > 0 && refContent.current) {
       refContent.current.style.transform = `translateY(${diff}px)`;
@@ -129,11 +198,11 @@ export const Modal = ({
 
     const diff = dragCurrentY.current - dragStartY.current;
     const duration = Date.now() - dragStartTime.current;
-    const velocity = diff / duration;
+    const velocity = duration > 0 ? diff / duration : 0;
 
     if (refContent.current) {
       refContent.current.style.transition = "transform 0.3s ease-out";
-      
+
       if (diff > DRAG_THRESHOLD || (diff > MIN_DRAG && velocity > VELOCITY_THRESHOLD)) {
         handleClose();
       } else {
@@ -149,12 +218,14 @@ export const Modal = ({
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
-    
+
     if (!canDrag(target)) return;
 
     dragStartY.current = e.clientY;
+    dragCurrentY.current = e.clientY;
     dragStartTime.current = Date.now();
     isDragging.current = true;
+    dragMovedRef.current = false;
     e.preventDefault();
   }, [canDrag]);
 
@@ -163,6 +234,10 @@ export const Modal = ({
 
     dragCurrentY.current = e.clientY;
     const diff = dragCurrentY.current - dragStartY.current;
+
+    if (Math.abs(diff) > TAP_THRESHOLD) {
+      dragMovedRef.current = true;
+    }
 
     if (diff > 0 && refContent.current) {
       refContent.current.style.transform = `translateY(${diff}px)`;
@@ -175,11 +250,11 @@ export const Modal = ({
 
     const diff = dragCurrentY.current - dragStartY.current;
     const duration = Date.now() - dragStartTime.current;
-    const velocity = diff / duration;
+    const velocity = duration > 0 ? diff / duration : 0;
 
     if (refContent.current) {
       refContent.current.style.transition = "transform 0.3s ease-out";
-      
+
       if (diff > DRAG_THRESHOLD || (diff > MIN_DRAG && velocity > VELOCITY_THRESHOLD)) {
         handleClose();
       } else {
@@ -193,6 +268,25 @@ export const Modal = ({
     dragStartTime.current = 0;
   }, [handleClose]);
 
+  const handleGrabberClick = useCallback(() => {
+    if (dragMovedRef.current) {
+      dragMovedRef.current = false;
+      return;
+    }
+
+    handleClose();
+  }, [handleClose]);
+
+  const handlersRef = useRef({ onKeyDown, handleMouseMove, handleMouseUp });
+
+  useLayoutEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  useLayoutEffect(() => {
+    handlersRef.current = { onKeyDown, handleMouseMove, handleMouseUp };
+  }, [onKeyDown, handleMouseMove, handleMouseUp]);
+
   useLayoutEffect(function handleOpenClose() {
     if (isOpen) {
       if (closeTimerRef.current) {
@@ -202,7 +296,11 @@ export const Modal = ({
       if (openTimerRef.current) {
         clearTimeout(openTimerRef.current);
       }
-  
+
+      if (!shouldRender) {
+        previousFocusRef.current = document.activeElement as HTMLElement | null;
+      }
+
       isClosingRef.current = false;
       isOpeningRef.current = true;
       setIsClosing(false);
@@ -219,12 +317,57 @@ export const Modal = ({
   }, [isOpen, shouldRender, handleClose]);
 
   useLayoutEffect(function manageModalStack() {
-    if (shouldRender && refContent.current) {
-      modalStack.push(refContent.current);
-      document.addEventListener("keydown", onKeyDown);
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      document.body.style.overflow = "hidden";
+    const content = refContent.current;
+    const modalRoot = content?.parentElement ?? null;
+
+    if (!shouldRender || !content || !modalRoot) return;
+
+    if (modalStack.length === 0) {
+      previousOverflowRef.current = document.body.style.overflow;
+    }
+    document.body.style.overflow = "hidden";
+    content.focus({ preventScroll: true });
+
+    const keyDownListener = (event: KeyboardEvent) => handlersRef.current.onKeyDown(event);
+    const mouseMoveListener = (event: MouseEvent) => handlersRef.current.handleMouseMove(event);
+    const mouseUpListener = () => handlersRef.current.handleMouseUp();
+
+    modalStack.push(content);
+    modalRootStack.push(modalRoot);
+
+    document.addEventListener("keydown", keyDownListener);
+    document.addEventListener("mousemove", mouseMoveListener);
+    document.addEventListener("mouseup", mouseUpListener);
+
+    const hiddenElements: Array<{ element: HTMLElement; inert: boolean; ariaHidden: boolean }> = [];
+    const useInert = supportsInert();
+
+    if (inertBackground) {
+      Array.from(document.body.children).forEach((element) => {
+        if (!(element instanceof HTMLElement)) return;
+        if (element === modalRoot) return;
+        if (modalRootStack.includes(element)) return;
+        if (
+          element.hasAttribute("data-floating-ui-portal") ||
+          element.querySelector("[data-floating-ui-portal]")
+        ) {
+          return;
+        }
+        if (element.hasAttribute("inert") || element.getAttribute("aria-hidden") === "true") {
+          return;
+        }
+
+        if (useInert) {
+          element.setAttribute("inert", "");
+        }
+
+        const ariaHidden = !useInert;
+        if (ariaHidden) {
+          element.setAttribute("aria-hidden", "true");
+        }
+
+        hiddenElements.push({ element, inert: useInert, ariaHidden });
+      });
     }
 
     return () => {
@@ -238,15 +381,27 @@ export const Modal = ({
       }
 
       modalStack.pop();
-      document.removeEventListener("keydown", onKeyDown);
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      modalRootStack.pop();
+
+      hiddenElements.forEach(({ element, inert, ariaHidden }) => {
+        if (inert) element.removeAttribute("inert");
+        if (ariaHidden) element.removeAttribute("aria-hidden");
+      });
+
+      document.removeEventListener("keydown", keyDownListener);
+      document.removeEventListener("mousemove", mouseMoveListener);
+      document.removeEventListener("mouseup", mouseUpListener);
 
       if (modalStack.length === 0) {
-        document.body.style.overflow = "visible";
+        document.body.style.overflow = previousOverflowRef.current;
+      }
+
+      if (modalStack.length === 0 && previousFocusRef.current?.isConnected) {
+        previousFocusRef.current.focus({ preventScroll: true });
+        previousFocusRef.current = null;
       }
     };
-  }, [shouldRender, onKeyDown, handleMouseMove, handleMouseUp]);
+  }, [shouldRender, inertBackground]);
 
   if (!shouldRender) return null;
 
@@ -256,27 +411,36 @@ export const Modal = ({
       onMouseDown={onMouseDownOverlay}
     >
       <div
+        {...rest}
         ref={refContent}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
         className={`${styles.modalContent} ${isClosing ? styles.modalClosing : ""} ${className || ""}`}
       >
-        <div 
+        <button
+          type="button"
           className={styles.modalDragHandle}
+          aria-label={ariaLabelClose}
+          onClick={handleGrabberClick}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
           onMouseDown={handleMouseDown}
         >
-          <span className={styles.dragIndicator}></span>
-        </div>
+          <span className={styles.dragIndicator} aria-hidden="true" />
+        </button>
 
-        <section 
+        <section
           className={styles.modalHeader}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           onMouseDown={handleMouseDown}
         >
-          <h2>{title}</h2>
+          <h2 id={titleId}>{title}</h2>
           {(hasCloseButtonInDesktop && isDesktop) && (
             <button
               className={styles.modalClose}
@@ -284,14 +448,14 @@ export const Modal = ({
               aria-label={ariaLabelClose}
               type="button"
             >
-              <i className="mc-x" />
+              <i className="mc-x" aria-hidden="true" />
             </button>
           )}
         </section>
 
-        <section 
+        <section
           ref={refBody}
-          className={`${styles.modalBody} ${isScrollAtTop ?styles.bodyScrollTop : ""}`}
+          className={`${styles.modalBody} ${isScrollAtTop ? styles.bodyScrollTop : ""}`}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}

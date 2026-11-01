@@ -45,9 +45,20 @@ describe("Button Component", () => {
 
   it("should show dots when loading", () => {
     const { container } = render(<Button loading>Content</Button>);
-    const dots = container.querySelector("span");
+    const dots = container.querySelector(`.${styles.dots}`);
     expect(dots).toBeInTheDocument();
-    expect(dots).toHaveClass(styles.dots);
+  });
+
+  it("keeps the accessible name while loading", () => {
+    render(<Button loading>Save changes</Button>);
+    expect(
+      screen.getByRole("button", { name: /save changes/i })
+    ).toHaveAttribute("aria-busy", "true");
+  });
+
+  it("defaults to type button so it does not submit a form", () => {
+    render(<Button>Action</Button>);
+    expect(screen.getByRole("button")).toHaveAttribute("type", "button");
   });
 
   it("should not call onClick when disabled", () => {

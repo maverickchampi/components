@@ -32,7 +32,11 @@ export const Bottom: Story = {
 export const Left: Story = {
   args: {
     placement: "left",
-    children: <i className="mc-earth" style={{ fontSize: 24, color: "green" }} />,
+    children: (
+      <button type="button" aria-label="Language" style={{ fontSize: 24 }}>
+        <i className="mc-earth" aria-hidden="true" />
+      </button>
+    ),
     content: "This is a tooltip on left"
   }
 };

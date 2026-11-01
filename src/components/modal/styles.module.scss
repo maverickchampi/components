@@ -7,7 +7,6 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  min-width: 360px;
   background-color: rgba(24, 24, 24, 0.4);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -37,6 +36,7 @@
     overflow: hidden;
     animation: growInMobile 0.3s ease-out;
     --start-y: 0px;
+    outline: none;
 
     &.modalClosing {
       animation: growOutMobile 0.3s ease-out forwards;
@@ -55,16 +55,38 @@
     }
 
     .modalDragHandle {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 1rem 0;
+      width: 100%;
+      min-height: 44px;
+      padding: 0;
+      border: 0;
+      background: none;
       cursor: grab;
       touch-action: none;
       user-select: none;
 
       &:active {
         cursor: grabbing;
+      }
+
+      &:focus-visible {
+        outline: none;
+      }
+
+      &:focus-visible::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 4.5rem;
+        height: 2.25rem;
+        transform: translate(-50%, -50%);
+        border: 2px solid var(--mc-color-primary);
+        border-radius: 999px;
+        pointer-events: none;
       }
 
       @media (min-width: 769px) {
@@ -122,20 +144,20 @@
       }
 
       .modalClose {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        padding: 0.25rem;
         cursor: pointer;
         background-color: transparent;
         border: none;
         border-radius: 0.25rem;
-        outline: none;
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.25rem;
 
         &:focus-visible {
-          box-shadow: 0 0 0 4px color-mix(in srgb, var(--mc-color-primary) 25%, transparent);
+          outline: 2px solid var(--mc-color-primary);
+          outline-offset: 2px;
         }
 
         i{

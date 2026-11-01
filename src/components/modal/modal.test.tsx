@@ -3,6 +3,7 @@ import type { ComponentProps } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeAll, beforeEach, afterEach } from "vitest";
 import { Modal } from ".";
+import styles from "./styles.module.scss";
 
 beforeAll(() => {
   Object.defineProperty(window, "matchMedia", {
@@ -85,8 +86,8 @@ describe("Modal", () => {
 
     vi.advanceTimersByTime(310);
 
-    const closeButton = screen.getByRole("button", { name: /close/i });
-    fireEvent.click(closeButton);
+    const closeButtons = screen.getAllByRole("button", { name: /close/i });
+    fireEvent.click(closeButtons[closeButtons.length - 1]);
 
     vi.advanceTimersByTime(310);
 
@@ -172,5 +173,89 @@ describe("Modal", () => {
     unmount();
 
     expect(document.body.style.overflow).toBe("visible");
+  });
+
+  it("exposes the modal as a labelled dialog", () => {
+    render(
+      <Modal isOpen={true} onClose={vi.fn()} title="Modal Title">
+        <div>Content</div>
+      </Modal>
+    );
+
+    vi.advanceTimersByTime(310);
+
+    const dialog = screen.getByRole("dialog", { name: "Modal Title" });
+
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+  });
+
+  it("keeps focus inside the dialog when tabbing from the last element", () => {
+    render(
+      <Modal isOpen={true} onClose={vi.fn()} title="Modal Title" hasCloseButtonInDesktop>
+        <button>Last action</button>
+      </Modal>
+    );
+
+    vi.advanceTimersByTime(310);
+
+    const dialog = screen.getByRole("dialog");
+    const lastAction = screen.getByRole("button", { name: "Last action" });
+
+    lastAction.focus();
+    fireEvent.keyDown(document, { key: "Tab" });
+
+    expect(dialog.contains(document.activeElement)).toBe(true);
+  });
+
+  it("closes when the mobile drag handle is activated", () => {
+    const handleClose = vi.fn();
+
+    render(
+      <ControlledModal title="Modal Title" onClose={handleClose}>
+        <div>Content</div>
+      </ControlledModal>
+    );
+
+    vi.advanceTimersByTime(310);
+
+    const handle = document.body.querySelector(`button.${styles.modalDragHandle}`);
+
+    expect(handle).toBeInTheDocument();
+    if (handle) fireEvent.click(handle);
+
+    vi.advanceTimersByTime(310);
+
+    expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("restores focus to the trigger after closing", () => {
+    function Wrapper() {
+      const [isModalOpen, setIsModalOpen] = useState(false);
+
+      return (
+        <>
+          <button onClick={() => setIsModalOpen(true)}>Open</button>
+          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Modal Title">
+            <button>Action</button>
+          </Modal>
+        </>
+      );
+    }
+
+    render(<Wrapper />);
+
+    const trigger = screen.getByRole("button", { name: "Open" });
+    trigger.focus();
+    fireEvent.click(trigger);
+
+    vi.advanceTimersByTime(310);
+
+    expect(document.activeElement).not.toBe(trigger);
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    vi.advanceTimersByTime(310);
+
+    expect(document.activeElement).toBe(trigger);
   });
 });
