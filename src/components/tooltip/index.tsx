@@ -62,6 +62,8 @@ export function Tooltip({
 
   const child = Children.only(children) as ReactElement<HTMLProps<Element>>;
   const referenceProps = getReferenceProps(child.props) as unknown as HTMLProps<Element>;
+  const childRef = (child.props.ref ??
+    (child as unknown as { ref?: Ref<Element> }).ref) as Ref<Element> | undefined;
 
   return (
     <>
@@ -69,7 +71,7 @@ export function Tooltip({
         ...referenceProps,
         ref: (node: Element | null) => {
           refs.setReference(node);
-          assignRef(child.ref as Ref<Element> | undefined, node);
+          assignRef(childRef, node);
         }
       })}
 

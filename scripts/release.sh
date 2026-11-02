@@ -132,42 +132,28 @@ esac
 
 print_success "New version: ${NEW_VERSION}"
 
-# Count available commits until finding a [version]
-AVAILABLE_COMMITS=0
-FOUND_VERSION=false
+# Get the last release commit and group every commit since then automatically
+LAST_VERSION_COMMIT=$(git log --grep="^\[version\]" -n 1 --format="%H" 2>/dev/null)
 
-COMMIT_LIST=$(git log --pretty=format:"%s")
-while IFS= read -r commit_msg; do
-    if [[ $commit_msg =~ ^\[version\] ]]; then
-        FOUND_VERSION=true
-        break
-    fi
-    ((AVAILABLE_COMMITS++))
-done <<EOF
-$COMMIT_LIST
-EOF
+if [ -z "$LAST_VERSION_COMMIT" ]; then
+    COMMIT_RANGE="HEAD"
+    AVAILABLE_COMMITS=$(git rev-list --count HEAD)
+else
+    COMMIT_RANGE="${LAST_VERSION_COMMIT}..HEAD"
+    AVAILABLE_COMMITS=$(git rev-list --count "$COMMIT_RANGE")
+fi
 
 if [ "$AVAILABLE_COMMITS" -eq 0 ]; then
     print_error "No new commits since last version"
     exit 1
 fi
 
+COMMIT_COUNT=$AVAILABLE_COMMITS
+
 print_info "Available commits (unversioned): ${AVAILABLE_COMMITS}"
-
-# Ask how many commits to include
 echo ""
-read -p "How many commits do you want to include in CHANGELOG? (1-${AVAILABLE_COMMITS}): " COMMIT_COUNT
-
-# Validate number
-if ! [[ "$COMMIT_COUNT" =~ ^[0-9]+$ ]] || [ "$COMMIT_COUNT" -lt 1 ] || [ "$COMMIT_COUNT" -gt "$AVAILABLE_COMMITS" ]; then
-    print_error "Invalid number of commits (must be between 1 and ${AVAILABLE_COMMITS})"
-    exit 1
-fi
-
-# Show commits to include
-echo ""
-print_info "Commits to include:"
-git log -n "$COMMIT_COUNT" --pretty=format:"%h - %s (%an)" --abbrev-commit
+print_info "Commits to include in CHANGELOG:"
+git log "$COMMIT_RANGE" --pretty=format:"  %h - %s (%an)"
 echo ""
 echo ""
 read -p "Are these commits correct? (y/n): " -n 1 -r
@@ -190,7 +176,7 @@ FIXED=""
 OTHER=""
 
 # Save commits in temporary variable
-COMMITS=$(git log -n "$COMMIT_COUNT" --pretty=format:"%s")
+COMMITS=$(git log "$COMMIT_RANGE" --pretty=format:"%s")
 
 # Read commits without cleaning prefixes
 while IFS= read -r commit_msg; do
@@ -313,6 +299,7 @@ while true; do
     echo "1) Retry build"
     echo "2) Continue without build"
     echo "3) Finish release (keep commit and tag)"
+    echo "4) Cancel release (rollback commit, tag and files)"
     echo ""
     read -p "Select: " BUILD_OPTION
 
@@ -328,6 +315,22 @@ while true; do
             print_warning "Run 'npm run build' later."
             rm -f CHANGELOG.md.bak
             exit 0
+            ;;
+        4)
+            print_warning "Cancelling release and rolling back..."
+
+            git tag -d "v${NEW_VERSION}" > /dev/null 2>&1
+            git reset --mixed HEAD~1 > /dev/null 2>&1
+
+            RESTORE_FILES="CHANGELOG.md package.json"
+            [ -f package-lock.json ] && RESTORE_FILES="$RESTORE_FILES package-lock.json"
+            git checkout -- $RESTORE_FILES 2>/dev/null
+
+            rm -f CHANGELOG.md.bak
+
+            print_success "Rollback done: commit, tag and version changes reverted."
+            print_info "Back to ${CURRENT_VERSION}."
+            exit 1
             ;;
         *)
             print_warning "Invalid option"
