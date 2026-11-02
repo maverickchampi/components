@@ -35,6 +35,7 @@ export const Modal = ({
   hasCloseButtonInDesktop,
   className,
   ariaLabelClose = "Close",
+  ariaLabelDrag = "Cerrar arrastrando",
   inertBackground = true,
   ...rest
 }: ModalProps) => {
@@ -64,6 +65,8 @@ export const Modal = ({
   const TAP_THRESHOLD = 10;
 
   const isDesktop = useMediaQuery("(min-width: 769px)");
+
+  const showGrabber = !isDesktop || !hasCloseButtonInDesktop;
 
   const handleClose = useCallback(() => {
     if (isClosingRef.current || isOpeningRef.current) return;
@@ -419,19 +422,21 @@ export const Modal = ({
         tabIndex={-1}
         className={`${styles.modalContent} ${isClosing ? styles.modalClosing : ""} ${className || ""}`}
       >
-        <button
-          type="button"
-          className={styles.modalDragHandle}
-          aria-label={ariaLabelClose}
-          onClick={handleGrabberClick}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onTouchCancel={handleTouchEnd}
-          onMouseDown={handleMouseDown}
-        >
-          <span className={styles.dragIndicator} aria-hidden="true" />
-        </button>
+        {showGrabber && (
+          <button
+            type="button"
+            className={styles.modalDragHandle}
+            aria-label={ariaLabelDrag}
+            onClick={handleGrabberClick}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+          >
+            <span className={styles.dragIndicator} aria-hidden="true" />
+          </button>
+        )}
 
         <section
           className={styles.modalHeader}

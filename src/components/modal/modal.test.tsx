@@ -11,19 +11,25 @@ const advanceTimers = (ms: number) => {
   });
 };
 
+const createMatchMedia = (desktop: boolean) => (query: string) => ({
+  matches: desktop && query === "(min-width: 769px)",
+  media: query,
+  onchange: null,
+  addListener: vi.fn(),
+  removeListener: vi.fn(),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  dispatchEvent: vi.fn()
+});
+
+const setViewport = (desktop: boolean) => {
+  vi.mocked(window.matchMedia).mockImplementation(createMatchMedia(desktop));
+};
+
 beforeAll(() => {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
-    value: vi.fn().mockImplementation((query) => ({
-      matches: query === "(min-width: 769px)",
-      media: query,
-      onchange: null,
-      addListener: vi.fn(), 
-      removeListener: vi.fn(), 
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn()
-    }))
+    value: vi.fn().mockImplementation(createMatchMedia(true))
   });
 });
 
@@ -52,6 +58,7 @@ function ControlledModal({
 describe("Modal", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    setViewport(true);
     document.body.style.overflow = "visible";
     document.body.innerHTML = "";
   });
@@ -214,7 +221,41 @@ describe("Modal", () => {
     expect(dialog.contains(document.activeElement)).toBe(true);
   });
 
+  it("exposes a single close button on desktop when hasCloseButtonInDesktop is true", () => {
+    render(
+      <ControlledModal title="Modal Title" hasCloseButtonInDesktop ariaLabelClose="Cerrar">
+        <div>Content</div>
+      </ControlledModal>
+    );
+
+    advanceTimers(310);
+
+    expect(screen.getAllByRole("button", { name: /cerrar/i })).toHaveLength(1);
+    expect(document.body.querySelector(`.${styles.modalDragHandle}`)).not.toBeInTheDocument();
+  });
+
+  it("keeps the drag handle focusable and named on mobile", () => {
+    setViewport(false);
+
+    render(
+      <ControlledModal title="Modal Title" hasCloseButtonInDesktop>
+        <div>Content</div>
+      </ControlledModal>
+    );
+
+    advanceTimers(310);
+
+    const handle = document.body.querySelector<HTMLButtonElement>(`button.${styles.modalDragHandle}`);
+
+    expect(handle).toBeInTheDocument();
+    expect(handle).toHaveAccessibleName("Cerrar arrastrando");
+
+    handle?.focus();
+    expect(handle).toHaveFocus();
+  });
+
   it("closes when the mobile drag handle is activated", () => {
+    setViewport(false);
     const handleClose = vi.fn();
 
     render(

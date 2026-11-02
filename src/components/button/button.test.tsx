@@ -37,10 +37,31 @@ describe("Button Component", () => {
     expect(button).toBeDisabled();
   });
 
-  it("should be disabled when loading is true", () => {
+  it("should not render aria-busy nor aria-disabled when loading is not set", () => {
+    render(<Button>Idle</Button>);
+    const button = screen.getByRole("button");
+    expect(button).not.toHaveAttribute("aria-busy");
+    expect(button).not.toHaveAttribute("aria-disabled");
+  });
+
+  it("should render aria-busy and aria-disabled when loading is true", () => {
     render(<Button loading>Loading</Button>);
     const button = screen.getByRole("button");
     expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("should not call onClick while loading", () => {
+    const handleClick = vi.fn();
+    render(
+      <Button loading onClick={handleClick}>
+        Loading
+      </Button>
+    );
+    const button = screen.getByRole("button");
+
+    fireEvent.click(button);
+    expect(handleClick).not.toHaveBeenCalled();
   });
 
   it("should show dots when loading", () => {
