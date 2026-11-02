@@ -35,6 +35,8 @@
       "mc-chevron-right": "&#xe913;",
       "mc-chevron-up": "&#xe914;",
       "mc-x": "&#xe915;",
+      "mc-eye": "&#xe917;",
+      "mc-eye-slash": "&#xe916;",
       "0": 0
     },
     els = document.getElementsByTagName("*"),

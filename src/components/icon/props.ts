@@ -20,7 +20,9 @@ export const ICON_NAMES = [
   "mc-chevron-left",
   "mc-chevron-right",
   "mc-chevron-up",
-  "mc-x"
+  "mc-x",
+  "mc-eye",
+  "mc-eye-slash"
 ] as const;
 
 export type IconName = (typeof ICON_NAMES)[number];

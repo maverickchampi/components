@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Input } from ".";
 
@@ -64,6 +64,64 @@ describe("Input", () => {
     );
 
     expect(screen.getByRole("textbox")).toHaveAttribute("type", "email");
+  });
+
+  it("supports password inputs", () => {
+    render(<Input type="password" label="Password" value="" onChange={vi.fn()} />);
+
+    expect(screen.getByLabelText("Password")).toHaveAttribute("type", "password");
+  });
+
+  it("supports number inputs", () => {
+    render(<Input type="number" label="Age" value="24" onChange={vi.fn()} />);
+
+    expect(screen.getByRole("spinbutton", { name: "Age" })).toHaveAttribute("type", "number");
+  });
+
+  it("toggles password visibility", () => {
+    render(<Input type="password" label="Password" value="secret" onChange={vi.fn()} />);
+
+    const input = screen.getByLabelText("Password");
+    const showButton = screen.getByRole("button", { name: "Show password" });
+
+    expect(input).toHaveAttribute("type", "password");
+    expect(showButton).toHaveAttribute("aria-pressed", "false");
+
+    fireEvent.click(showButton);
+
+    expect(input).toHaveAttribute("type", "text");
+
+    const hideButton = screen.getByRole("button", { name: "Hide password" });
+
+    expect(hideButton).toHaveAttribute("aria-pressed", "true");
+
+    fireEvent.click(hideButton);
+
+    expect(input).toHaveAttribute("type", "password");
+  });
+
+  it("does not render the password toggle for other types", () => {
+    render(<Input type="email" label="Email" value="" onChange={vi.fn()} />);
+
+    expect(
+      screen.queryByRole("button", { name: /password/i })
+    ).not.toBeInTheDocument();
+  });
+
+  it("disables the password toggle when the input is disabled", () => {
+    render(
+      <Input
+        type="password"
+        label="Password"
+        value=""
+        onChange={vi.fn()}
+        disabled
+      />
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Show password" })
+    ).toBeDisabled();
   });
 
   it("keeps the placeholder for floating label behavior", () => {

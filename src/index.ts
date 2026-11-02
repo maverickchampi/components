@@ -14,6 +14,8 @@ export { Modal } from "./components/modal";
 export { ModalProps } from "./components/modal/props";
 export { ScrollToTop } from "./components/scrollToTop";
 export { ScrollToTopProps } from "./components/scrollToTop/props";
+export { Select } from "./components/select";
+export { SelectProps } from "./components/select/props";
 export { Textarea } from "./components/textarea";
 export { TextareaProps } from "./components/textarea/props";
 export { Tooltip } from "./components/tooltip";

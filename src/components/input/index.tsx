@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, useState } from "react";
 import styles from "./styles.module.scss";
 import type { InputProps } from "./props";
 
@@ -14,6 +14,9 @@ export const Input = ({
   const errorId = error ? `${inputId}-error` : undefined;
   const describedBy =
     [props["aria-describedby"], errorId].filter(Boolean).join(" ") || undefined;
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const isPassword = type === "password";
+  const inputType = isPassword && isPasswordVisible ? "text" : type;
 
   return (
     <div className={`${styles.inputComponent} ${className ?? ""}`}>
@@ -21,13 +24,29 @@ export const Input = ({
         <input
           {...props}
           id={inputId}
-          type={type}
+          type={inputType}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           value={props.value ?? ""}
           placeholder={props.placeholder ?? " "}
-          className={styles.input}
+          className={`${styles.input} ${isPassword ? styles.hasPasswordToggle : ""}`}
         />
+        {isPassword && (
+          <button
+            type="button"
+            className={styles.passwordToggle}
+            aria-label={isPasswordVisible ? "Hide password" : "Show password"}
+            aria-pressed={isPasswordVisible}
+            disabled={props.disabled}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => setIsPasswordVisible((visible) => !visible)}
+          >
+            <i
+              className={isPasswordVisible ? "mc-eye-slash" : "mc-eye"}
+              aria-hidden="true"
+            />
+          </button>
+        )}
         <label htmlFor={inputId} className={styles.label}>
           {label}
         </label>

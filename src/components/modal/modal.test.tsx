@@ -1,9 +1,15 @@
 import { useState } from "react";
 import type { ComponentProps } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, act } from "@testing-library/react";
 import { describe, expect, it, vi, beforeAll, beforeEach, afterEach } from "vitest";
 import { Modal } from ".";
 import styles from "./styles.module.scss";
+
+const advanceTimers = (ms: number) => {
+  act(() => {
+    vi.advanceTimersByTime(ms);
+  });
+};
 
 beforeAll(() => {
   Object.defineProperty(window, "matchMedia", {
@@ -84,12 +90,12 @@ describe("Modal", () => {
       </ControlledModal>
     );
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     const closeButtons = screen.getAllByRole("button", { name: /close/i });
     fireEvent.click(closeButtons[closeButtons.length - 1]);
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
@@ -103,7 +109,7 @@ describe("Modal", () => {
       </ControlledModal>
     );
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     const overlay = document.body.querySelector("[class*='modalComponent']");
     
@@ -117,7 +123,7 @@ describe("Modal", () => {
       });
     }
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
@@ -131,7 +137,7 @@ describe("Modal", () => {
       </ControlledModal>
     );
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     const overlay = container.querySelector("[class*='modalComponent']");
     
@@ -139,7 +145,7 @@ describe("Modal", () => {
       fireEvent.mouseDown(overlay, { button: 0 });
     }
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
     expect(handleClose).not.toHaveBeenCalled();
   });
 
@@ -152,11 +158,11 @@ describe("Modal", () => {
       </ControlledModal>
     );
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     fireEvent.keyDown(document, { key: "Escape" });
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
@@ -182,7 +188,7 @@ describe("Modal", () => {
       </Modal>
     );
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     const dialog = screen.getByRole("dialog", { name: "Modal Title" });
 
@@ -197,7 +203,7 @@ describe("Modal", () => {
       </Modal>
     );
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     const dialog = screen.getByRole("dialog");
     const lastAction = screen.getByRole("button", { name: "Last action" });
@@ -217,14 +223,14 @@ describe("Modal", () => {
       </ControlledModal>
     );
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     const handle = document.body.querySelector(`button.${styles.modalDragHandle}`);
 
     expect(handle).toBeInTheDocument();
     if (handle) fireEvent.click(handle);
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
@@ -249,12 +255,12 @@ describe("Modal", () => {
     trigger.focus();
     fireEvent.click(trigger);
 
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     expect(document.activeElement).not.toBe(trigger);
 
     fireEvent.keyDown(document, { key: "Escape" });
-    vi.advanceTimersByTime(310);
+    advanceTimers(310);
 
     expect(document.activeElement).toBe(trigger);
   });

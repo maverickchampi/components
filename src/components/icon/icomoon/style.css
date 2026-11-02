@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icons';
-  src:  url('fonts/icons.eot?ykjcx1');
-  src:  url('fonts/icons.eot?ykjcx1#iefix') format('embedded-opentype'),
-    url('fonts/icons.ttf?ykjcx1') format('truetype'),
-    url('fonts/icons.woff?ykjcx1') format('woff'),
-    url('fonts/icons.svg?ykjcx1#icons') format('svg');
+  src:  url('fonts/icons.eot?d2zdih');
+  src:  url('fonts/icons.eot?d2zdih#iefix') format('embedded-opentype'),
+    url('fonts/icons.ttf?d2zdih') format('truetype'),
+    url('fonts/icons.woff?d2zdih') format('woff'),
+    url('fonts/icons.svg?d2zdih#icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -17,7 +17,6 @@
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
-  font-size: 24px;
   text-transform: none;
   line-height: 1;
 
@@ -91,4 +90,10 @@
 }
 .mc-x:before {
   content: "\e915";
+}
+.mc-eye:before {
+  content: "\e917";
+}
+.mc-eye-slash:before {
+  content: "\e916";
 }

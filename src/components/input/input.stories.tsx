@@ -7,6 +7,12 @@ const meta: Meta<typeof Input> = {
   title: "Components/Input",
   component: Input,
   tags: ["autodocs"],
+  argTypes: {
+    type: {
+      control: "select",
+      options: ["text", "email", "password", "number"]
+    }
+  },
   args: {
     label: "Email",
     type: "email",
@@ -43,6 +49,26 @@ export const WithValue: Story = {
     label: "Full name",
     type: "text",
     value: "Maverick Champi"
+  },
+  render: (args) => <InputWithState {...args} />
+};
+
+export const Password: Story = {
+  args: {
+    label: "Password",
+    type: "password",
+    value: "supersecret"
+  },
+  render: (args) => <InputWithState {...args} />
+};
+
+export const Number: Story = {
+  args: {
+    label: "Age",
+    type: "number",
+    value: "24",
+    min: 0,
+    max: 120
   },
   render: (args) => <InputWithState {...args} />
 };
