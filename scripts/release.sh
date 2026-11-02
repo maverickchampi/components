@@ -1,6 +1,5 @@
-# chmod +x ./scripts/release.sh
-
 #!/bin/bash
+# chmod +x ./scripts/release.sh
 
 # Output colors
 RED='\033[0;31m'
@@ -26,16 +25,33 @@ print_warning() {
     printf "${YELLOW}⚠️  %s${NC}\n" "$1"
 }
 
+# Restore the CHANGELOG backup created during the release.
+restore_changelog_backup() {
+    if [ -f CHANGELOG.md.bak ]; then
+        mv CHANGELOG.md.bak CHANGELOG.md
+    fi
+}
+
+# Restore the files modified by the release from HEAD.
+# Requires a clean working tree before releasing, so this never discards user work.
+restore_release_files() {
+    git checkout HEAD -- $RELEASE_FILES > /dev/null 2>&1
+}
+
+# Undo the local release commit and tag, then restore files.
+# Safe to call only after RELEASE_COMMIT exists (and before pushing).
 rollback_release() {
     print_warning "Cancelling release and rolling back..."
 
-    git tag -d "v${NEW_VERSION}" > /dev/null 2>&1
-    git reset --mixed HEAD~1 > /dev/null 2>&1
+    if [ -n "$NEW_VERSION" ]; then
+        git tag -d "v${NEW_VERSION}" > /dev/null 2>&1
+    fi
 
-    RESTORE_FILES="CHANGELOG.md package.json"
-    [ -f package-lock.json ] && RESTORE_FILES="$RESTORE_FILES package-lock.json"
-    git checkout -- $RESTORE_FILES 2>/dev/null
+    if [ -n "$RELEASE_COMMIT" ]; then
+        git reset --mixed "${RELEASE_COMMIT}^" > /dev/null 2>&1
+    fi
 
+    restore_release_files
     rm -f CHANGELOG.md.bak
 
     print_success "Rollback done: commit, tag and version changes reverted."
@@ -43,47 +59,29 @@ rollback_release() {
     exit 1
 }
 
-# ============================================
-# CODE QUALITY VALIDATIONS
-# ============================================
+# Run a validation command and stop the release if it fails.
+# Validations never modify release files, so failing here leaves the repo untouched.
+run_validation() {
+    local NAME="$1"
+    shift
+    local START_TIME END_TIME ELAPSED
 
-echo ""
-print_info "Running code quality validations..."
-echo ""
+    START_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
 
-# 1. Run Lint
-print_info "1/2 Running lint..."
-START_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
-if npm run lint > /dev/null 2>&1; then
-    END_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
-    ELAPSED=$(echo "$END_TIME - $START_TIME" | bc)
-    print_success "Lint: OK (${ELAPSED}s)"
-else
-    print_error "Lint: FAILED"
-    echo ""
-    print_error "Run 'npm run lint' to see details."
-    echo ""
-    exit 1
-fi
+    if "$@" > /dev/null 2>&1; then
+        END_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
+        ELAPSED=$(echo "$END_TIME - $START_TIME" | bc)
+        print_success "${NAME}: OK (${ELAPSED}s)"
+        return 0
+    fi
 
-# 2. Run Unit Tests
-print_info "2/2 Running unit tests..."
-START_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
-if npm test > /dev/null 2>&1; then
-    END_TIME=$(perl -MTime::HiRes=time -e 'printf "%.3f\n", time')
-    ELAPSED=$(echo "$END_TIME - $START_TIME" | bc)
-    print_success "Unit tests: OK (${ELAPSED}s)"
-else
-    print_error "Unit tests: FAILED"
+    print_error "${NAME}: FAILED"
     echo ""
-    print_error "Run 'npm test' to see details."
+    print_error "Run '$*' to see details."
+    print_warning "Release stopped. No version, commit or tag was created."
     echo ""
     exit 1
-fi
-
-echo ""
-print_success "🎉 All validations passed successfully"
-echo ""
+}
 
 # ============================================
 # GIT VALIDATIONS
@@ -95,15 +93,38 @@ if ! git rev-parse --git-dir > /dev/null 2>&1; then
     exit 1
 fi
 
-# Verify there are no uncommitted changes
+# Verify there are no uncommitted changes.
+# npm version refuses to run on a dirty tree and the release commit would
+# otherwise include unrelated work, making rollback unsafe.
 if [[ -n $(git status -s) ]]; then
-    print_warning "You have uncommitted changes"
-    read -p "Do you want to continue anyway? (y/n): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
+    print_error "You have uncommitted changes"
+    print_warning "Commit or stash them before releasing."
+    exit 1
 fi
+
+RELEASE_FILES="CHANGELOG.md package.json"
+[ -f package-lock.json ] && RELEASE_FILES="$RELEASE_FILES package-lock.json"
+
+# ============================================
+# CODE QUALITY VALIDATIONS
+# ============================================
+
+echo ""
+print_info "Running validations..."
+echo ""
+
+run_validation "1/3 Lint" npm run lint
+run_validation "2/3 Unit tests" npm test
+run_validation "3/3 Build" npm run build
+
+echo ""
+print_success "🎉 All validations passed successfully"
+echo ""
+
+BUILD_DONE=true
+PUBLISH_DONE=false
+PUSH_DONE=false
+RELEASE_COMMIT=""
 
 # ============================================
 # RELEASE PROCESS
@@ -111,6 +132,7 @@ fi
 
 # Get current version
 CURRENT_VERSION=$(node -p "require('./package.json').version")
+PACKAGE_NAME=$(node -p "require('./package.json').name")
 print_info "Current version: ${CURRENT_VERSION}"
 
 # Split MAJOR.MINOR.PATCH
@@ -148,6 +170,12 @@ case $VERSION_TYPE in
 esac
 
 print_success "New version: ${NEW_VERSION}"
+
+# Make sure the tag does not exist yet
+if git rev-parse "v${NEW_VERSION}" > /dev/null 2>&1; then
+    print_error "Tag v${NEW_VERSION} already exists"
+    exit 1
+fi
 
 # Get the last release commit and group every commit since then automatically
 LAST_VERSION_COMMIT=$(git log --grep="^\[version\]" -n 1 --format="%H" 2>/dev/null)
@@ -267,93 +295,54 @@ head -n 40 CHANGELOG.md
 echo "─────────────────────────────────────────"
 echo ""
 
-# Confirm before continuing
-read -p "Do you want to continue with the release? (y/n): " -n 1 -r
+# Confirm before bumping version and committing
+read -p "Do you want to publish version ${NEW_VERSION}? (y/n): " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     print_warning "Operation cancelled. Restoring backup..."
-    mv CHANGELOG.md.bak CHANGELOG.md
+    restore_changelog_backup
     exit 1
 fi
 
 # Update package.json
-npm version "$NEW_VERSION" --no-git-tag-version > /dev/null 2>&1
+if ! npm version "$NEW_VERSION" --no-git-tag-version > /dev/null 2>&1; then
+    print_error "Failed to update package.json to ${NEW_VERSION}"
+    restore_changelog_backup
+    restore_release_files
+    exit 1
+fi
 print_success "package.json updated to ${NEW_VERSION}"
 
 # Commit with structure [version] X.X.X
-git add CHANGELOG.md package.json package-lock.json
-git commit -m "[version] ${NEW_VERSION}"
-git tag -a "v${NEW_VERSION}" -m "Release ${NEW_VERSION}"
+if ! git add $RELEASE_FILES; then
+    print_error "git add failed"
+    restore_changelog_backup
+    restore_release_files
+    exit 1
+fi
+
+if ! git commit -m "[version] ${NEW_VERSION}"; then
+    print_error "git commit failed"
+    restore_changelog_backup
+    restore_release_files
+    exit 1
+fi
+
+RELEASE_COMMIT=$(git rev-parse HEAD)
+
+if ! git tag -a "v${NEW_VERSION}" -m "Release ${NEW_VERSION}"; then
+    print_error "git tag failed"
+    rollback_release
+fi
 
 print_success "Commit and tag created"
-
-# ============================================
-# BUILD
-# ============================================
-
-BUILD_DONE=false
-PUBLISH_DONE=false
-PUSH_DONE=false
-
-echo ""
-read -p "Do you want to prepare the build? (y/n): " -n 1 -r
-echo
-
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-
-while true; do
-
-    print_info "Building package..."
-
-    if npm run build; then
-        BUILD_DONE=true
-        print_success "Build completed"
-        break
-    fi
-
-    print_error "Build failed"
-    echo ""
-    echo "1) Retry build"
-    echo "2) Continue without build"
-    echo "3) Finish release (keep commit and tag)"
-    echo "4) Cancel release (rollback commit, tag and files)"
-    echo ""
-    read -p "Select: " BUILD_OPTION
-
-    case $BUILD_OPTION in
-        1)
-            ;;
-        2)
-            break
-            ;;
-        3)
-            print_warning "Release paused."
-            print_warning "Commit and tag are safe."
-            print_warning "Run 'npm run build' later."
-            rm -f CHANGELOG.md.bak
-            exit 0
-            ;;
-        4)
-            rollback_release
-            ;;
-        *)
-            print_warning "Invalid option"
-            ;;
-    esac
-
-done
-
-fi
 
 # ============================================
 # PUBLISH
 # ============================================
 
 echo ""
-read -p "Do you want to publish the package? (y/n): " -n 1 -r
-echo
-
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+print_info "Publishing package..."
 
 while true; do
 
@@ -375,51 +364,28 @@ while true; do
         print_error "Publish skipped: no valid npm session."
         print_warning "Your release commit is SAFE."
         print_warning "Your tag is SAFE."
-        echo ""
-        echo "1) Retry authentication (npm login)"
-        echo "2) Finish release (keep commit and tag)"
-        echo "3) Cancel release (rollback commit, tag and files)"
-        echo ""
-        read -p "Select: " AUTH_OPTION
+    else
+        print_info "Publishing package..."
 
-        case $AUTH_OPTION in
-            1)
-                continue
-                ;;
-            2)
-                print_warning "Release paused. Run 'npm login' and 'npm publish' later."
-                rm -f CHANGELOG.md.bak
-                exit 0
-                ;;
-            3)
-                rollback_release
-                ;;
-            *)
-                print_warning "Invalid option"
-                ;;
-        esac
+        if npm publish; then
+            PUBLISH_DONE=true
+            print_success "Package published"
+            break
+        fi
 
-        continue
+        print_error "Publish failed"
+        echo ""
+        print_warning "Your release commit is SAFE."
+        print_warning "Your tag is SAFE."
+        echo ""
+        print_warning "If it was 401/404: run 'npm login' and make sure your account owns the scope."
     fi
 
-    print_info "Publishing package..."
-
-    if npm publish; then
-        PUBLISH_DONE=true
-        print_success "Package published"
-        break
-    fi
-
-    print_error "Publish failed"
-    echo ""
-    print_warning "Your release commit is SAFE."
-    print_warning "Your tag is SAFE."
-    echo ""
-    print_warning "If it was 401/404: run 'npm login' and make sure your account owns the '@maverickchampi' scope."
     echo ""
     echo "1) Retry publish"
-    echo "2) Finish release (keep commit and tag)"
-    echo "3) Cancel release (rollback commit, tag and files)"
+    echo "2) Log in and retry"
+    echo "3) Continue (keep commit and tag)"
+    echo "4) Rollback (undo commit, tag and files)"
     echo ""
     read -p "Select: " PUBLISH_OPTION
 
@@ -427,21 +393,28 @@ while true; do
         1)
             ;;
         2)
+            npm login
+            ;;
+        3)
             print_warning ""
             print_warning "Release paused."
             print_warning "Nothing has been lost."
             print_warning ""
             print_warning "Continue later with:"
             echo ""
-            echo "npm login"
             echo "npm publish"
             echo "git push origin master --tags"
             echo ""
             rm -f CHANGELOG.md.bak
             exit 0
             ;;
-        3)
-            rollback_release
+        4)
+            if npm view "${PACKAGE_NAME}@${NEW_VERSION}" version > /dev/null 2>&1; then
+                print_error "Version ${NEW_VERSION} is already on npm; rollback would not unpublish it."
+                print_warning "Keeping the local commit and tag."
+            else
+                rollback_release
+            fi
             ;;
         *)
             print_warning "Invalid option"
@@ -449,8 +422,6 @@ while true; do
     esac
 
 done
-
-fi
 
 # ============================================
 # PUSH
