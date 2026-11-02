@@ -1,4 +1,12 @@
 
+## [1.4.0] - 2026-11-01
+
+### Added
+- [feat] enhance release script to automatically group commits since last version and add rollback option
+
+---
+
+
 ## [1.3.0] - 2026-11-01
 
 ### Added
