@@ -26,6 +26,23 @@ print_warning() {
     printf "${YELLOW}⚠️  %s${NC}\n" "$1"
 }
 
+rollback_release() {
+    print_warning "Cancelling release and rolling back..."
+
+    git tag -d "v${NEW_VERSION}" > /dev/null 2>&1
+    git reset --mixed HEAD~1 > /dev/null 2>&1
+
+    RESTORE_FILES="CHANGELOG.md package.json"
+    [ -f package-lock.json ] && RESTORE_FILES="$RESTORE_FILES package-lock.json"
+    git checkout -- $RESTORE_FILES 2>/dev/null
+
+    rm -f CHANGELOG.md.bak
+
+    print_success "Rollback done: commit, tag and version changes reverted."
+    print_info "Back to ${CURRENT_VERSION}."
+    exit 1
+}
+
 # ============================================
 # CODE QUALITY VALIDATIONS
 # ============================================
@@ -317,20 +334,7 @@ while true; do
             exit 0
             ;;
         4)
-            print_warning "Cancelling release and rolling back..."
-
-            git tag -d "v${NEW_VERSION}" > /dev/null 2>&1
-            git reset --mixed HEAD~1 > /dev/null 2>&1
-
-            RESTORE_FILES="CHANGELOG.md package.json"
-            [ -f package-lock.json ] && RESTORE_FILES="$RESTORE_FILES package-lock.json"
-            git checkout -- $RESTORE_FILES 2>/dev/null
-
-            rm -f CHANGELOG.md.bak
-
-            print_success "Rollback done: commit, tag and version changes reverted."
-            print_info "Back to ${CURRENT_VERSION}."
-            exit 1
+            rollback_release
             ;;
         *)
             print_warning "Invalid option"
@@ -353,6 +357,51 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
 while true; do
 
+    # Verify npm authentication before publishing.
+    # npm answers 404 on PUT when the token is missing/expired or the
+    # account has no permission over the package scope.
+    if ! npm whoami > /dev/null 2>&1; then
+        print_error "You are not authenticated with npm (or your token expired)."
+        print_warning "A 404 on publish usually means this."
+        echo ""
+        read -p "Do you want to run 'npm login' now? (y/n): " -n 1 -r
+        echo
+
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            npm login
+            continue
+        fi
+
+        print_error "Publish skipped: no valid npm session."
+        print_warning "Your release commit is SAFE."
+        print_warning "Your tag is SAFE."
+        echo ""
+        echo "1) Retry authentication (npm login)"
+        echo "2) Finish release (keep commit and tag)"
+        echo "3) Cancel release (rollback commit, tag and files)"
+        echo ""
+        read -p "Select: " AUTH_OPTION
+
+        case $AUTH_OPTION in
+            1)
+                continue
+                ;;
+            2)
+                print_warning "Release paused. Run 'npm login' and 'npm publish' later."
+                rm -f CHANGELOG.md.bak
+                exit 0
+                ;;
+            3)
+                rollback_release
+                ;;
+            *)
+                print_warning "Invalid option"
+                ;;
+        esac
+
+        continue
+    fi
+
     print_info "Publishing package..."
 
     if npm publish; then
@@ -366,8 +415,11 @@ while true; do
     print_warning "Your release commit is SAFE."
     print_warning "Your tag is SAFE."
     echo ""
+    print_warning "If it was 401/404: run 'npm login' and make sure your account owns the '@maverickchampi' scope."
+    echo ""
     echo "1) Retry publish"
     echo "2) Finish release (keep commit and tag)"
+    echo "3) Cancel release (rollback commit, tag and files)"
     echo ""
     read -p "Select: " PUBLISH_OPTION
 
@@ -381,11 +433,15 @@ while true; do
             print_warning ""
             print_warning "Continue later with:"
             echo ""
+            echo "npm login"
             echo "npm publish"
             echo "git push origin master --tags"
             echo ""
             rm -f CHANGELOG.md.bak
             exit 0
+            ;;
+        3)
+            rollback_release
             ;;
         *)
             print_warning "Invalid option"
