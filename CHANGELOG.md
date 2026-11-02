@@ -1,4 +1,12 @@
 
+## [1.4.3] - 2026-11-02
+
+### Changed
+- [refactor] improve rollback functionality and validation process
+
+---
+
+
 ## [1.4.2] - 2026-11-02
 
 ### Added
