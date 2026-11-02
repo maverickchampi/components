@@ -1,4 +1,13 @@
 
+## [1.3.0] - 2026-11-01
+
+### Added
+- [feat] add select component and input variants such as number and password
+- [feat] enhance accessibility and improve component behavior
+
+---
+
+
 ## [1.2.1] - 2026-08-25
 
 ### Fixed
