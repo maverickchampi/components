@@ -1,4 +1,12 @@
 
+## [1.4.4] - 2026-11-02
+
+### Added
+- [feat] streamline user confirmation prompts in release script
+
+---
+
+
 ## [1.4.3] - 2026-11-02
 
 ### Changed
