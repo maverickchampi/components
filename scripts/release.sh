@@ -25,6 +25,23 @@ print_warning() {
     printf "${YELLOW}⚠️  %s${NC}\n" "$1"
 }
 
+# Ask a yes/no question and keep asking until the user answers y or n.
+# Reading the whole line avoids the leftover newline problem of `read -n 1`,
+# which could answer the next prompt with an empty value and skip a step.
+confirm() {
+    local PROMPT="$1"
+    local REPLY
+
+    while true; do
+        read -r -p "${PROMPT} (y/n): " REPLY
+        case "$REPLY" in
+            [Yy]|[Yy][Ee][Ss]) return 0 ;;
+            [Nn]|[Nn][Oo]) return 1 ;;
+            *) print_warning "Please answer 'y' or 'n'." ;;
+        esac
+    done
+}
+
 # Restore the CHANGELOG backup created during the release.
 restore_changelog_backup() {
     if [ -f CHANGELOG.md.bak ]; then
@@ -201,9 +218,7 @@ print_info "Commits to include in CHANGELOG:"
 git log "$COMMIT_RANGE" --pretty=format:"  %h - %s (%an)"
 echo ""
 echo ""
-read -p "Are these commits correct? (y/n): " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+if ! confirm "Are these commits correct?"; then
     print_warning "Operation cancelled"
     exit 1
 fi
@@ -296,9 +311,7 @@ echo "────────────────────────�
 echo ""
 
 # Confirm before bumping version and committing
-read -p "Do you want to publish version ${NEW_VERSION}? (y/n): " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+if ! confirm "Do you want to publish version ${NEW_VERSION}?"; then
     print_warning "Operation cancelled. Restoring backup..."
     restore_changelog_backup
     exit 1
@@ -353,10 +366,7 @@ while true; do
         print_error "You are not authenticated with npm (or your token expired)."
         print_warning "A 404 on publish usually means this."
         echo ""
-        read -p "Do you want to run 'npm login' now? (y/n): " -n 1 -r
-        echo
-
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
+        if confirm "Do you want to run 'npm login' now?"; then
             npm login
             continue
         fi
@@ -428,10 +438,7 @@ done
 # ============================================
 
 echo ""
-read -p "Do you want to push commit and tag? (y/n): " -n 1 -r
-echo
-
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if confirm "Do you want to push commit and tag?"; then
 
 while true; do
 
