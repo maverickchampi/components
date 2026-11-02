@@ -1,4 +1,12 @@
 
+## [1.4.1] - 2026-11-01
+
+### Added
+- [feat] add rollback functionality to release script and verify npm authentication
+
+---
+
+
 ## [1.4.0] - 2026-11-01
 
 ### Added
