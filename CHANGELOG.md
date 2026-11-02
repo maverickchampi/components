@@ -1,4 +1,12 @@
 
+## [1.4.2] - 2026-11-02
+
+### Added
+- [feat] enhance Button and Modal components with loading states and accessibility improvements
+
+---
+
+
 ## [1.4.1] - 2026-11-01
 
 ### Added
