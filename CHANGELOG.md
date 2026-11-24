@@ -1,4 +1,12 @@
 
+## [1.5.0] - 2026-11-24
+
+### Added
+- [feat] add support for date input type and related styles
+
+---
+
+
 ## [1.4.4] - 2026-11-02
 
 ### Added
