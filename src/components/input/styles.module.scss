@@ -39,7 +39,8 @@
 
       &:focus ~ label,
       &:not(:placeholder-shown)~label,
-      &:-webkit-autofill {
+      &:-webkit-autofill,
+      &.isDate ~ label {
         top: 0;
         font-size: 0.8rem;
         padding: 0 0.5rem;

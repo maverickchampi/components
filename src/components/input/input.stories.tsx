@@ -10,7 +10,7 @@ const meta: Meta<typeof Input> = {
   argTypes: {
     type: {
       control: "select",
-      options: ["text", "email", "password", "number"]
+      options: ["text", "email", "password", "number", "date"]
     }
   },
   args: {
@@ -69,6 +69,15 @@ export const Number: Story = {
     value: "24",
     min: 0,
     max: 120
+  },
+  render: (args) => <InputWithState {...args} />
+};
+
+export const DateInput: Story = {
+  args: {
+    label: "Birth date",
+    type: "date",
+    value: "1995-05-24"
   },
   render: (args) => <InputWithState {...args} />
 };

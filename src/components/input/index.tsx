@@ -16,6 +16,7 @@ export const Input = ({
     [props["aria-describedby"], errorId].filter(Boolean).join(" ") || undefined;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const isPassword = type === "password";
+  const isDate = type === "date";
   const inputType = isPassword && isPasswordVisible ? "text" : type;
 
   return (
@@ -29,7 +30,7 @@ export const Input = ({
           aria-describedby={describedBy}
           value={props.value ?? ""}
           placeholder={props.placeholder ?? " "}
-          className={`${styles.input} ${isPassword ? styles.hasPasswordToggle : ""}`}
+          className={`${styles.input} ${isPassword ? styles.hasPasswordToggle : ""} ${isDate ? styles.isDate : ""}`}
         />
         {isPassword && (
           <button

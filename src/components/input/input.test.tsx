@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Input } from ".";
+import styles from "./styles.module.scss";
 
 describe("Input", () => {
   it("renders the label and input", () => {
@@ -76,6 +77,34 @@ describe("Input", () => {
     render(<Input type="number" label="Age" value="24" onChange={vi.fn()} />);
 
     expect(screen.getByRole("spinbutton", { name: "Age" })).toHaveAttribute("type", "number");
+  });
+
+  it("supports date inputs", () => {
+    render(
+      <Input
+        id="birth-date"
+        type="date"
+        label="Birth date"
+        value="2024-01-01"
+        onChange={vi.fn()}
+      />
+    );
+
+    expect(screen.getByLabelText("Birth date")).toHaveAttribute("type", "date");
+  });
+
+  it("keeps the label floated for date inputs", () => {
+    render(
+      <Input
+        id="birth-date"
+        type="date"
+        label="Birth date"
+        value=""
+        onChange={vi.fn()}
+      />
+    );
+
+    expect(screen.getByLabelText("Birth date")).toHaveClass(styles.isDate);
   });
 
   it("toggles password visibility", () => {
