@@ -1,4 +1,15 @@
 
+## [1.6.0] - 2026-11-25
+
+### Added
+- [feat] update icon font files and add new icons
+
+### Fixed
+- [fix] improve code formatting and consistency in demo.js and ie7.js
+
+---
+
+
 ## [1.5.0] - 2026-11-24
 
 ### Added
