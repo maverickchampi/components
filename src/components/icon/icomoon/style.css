@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icons';
-  src:  url('fonts/icons.eot?d2zdih');
-  src:  url('fonts/icons.eot?d2zdih#iefix') format('embedded-opentype'),
-    url('fonts/icons.ttf?d2zdih') format('truetype'),
-    url('fonts/icons.woff?d2zdih') format('woff'),
-    url('fonts/icons.svg?d2zdih#icons') format('svg');
+  src:  url('fonts/icons.eot?70kmgu');
+  src:  url('fonts/icons.eot?70kmgu#iefix') format('embedded-opentype'),
+    url('fonts/icons.ttf?70kmgu') format('truetype'),
+    url('fonts/icons.woff?70kmgu') format('woff'),
+    url('fonts/icons.svg?70kmgu#icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -96,4 +96,16 @@
 }
 .mc-eye-slash:before {
   content: "\e916";
+}
+.mc-wallet:before {
+  content: "\e918";
+}
+.mc-vault:before {
+  content: "\e919";
+}
+.mc-gift:before {
+  content: "\e91a";
+}
+.mc-calculator:before {
+  content: "\e91b";
 }

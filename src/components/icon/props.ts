@@ -22,7 +22,11 @@ export const ICON_NAMES = [
   "mc-chevron-up",
   "mc-x",
   "mc-eye",
-  "mc-eye-slash"
+  "mc-eye-slash",
+  "mc-calculator",
+  "mc-wallet",
+  "mc-vault",
+  "mc-gift"
 ] as const;
 
 export type IconName = (typeof ICON_NAMES)[number];
